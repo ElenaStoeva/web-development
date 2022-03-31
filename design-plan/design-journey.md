@@ -210,14 +210,19 @@ In the last combination, each combination of plant_id and tag_id should be uniqu
 > Plan _all_ of your database queries. You may use natural language, pseudocode, or SQL.
 
 ```
-TODO: Plan a query
+Add a new plant:
+INSERT INTO plants (plant_name_coll, plant_name_spec, plant_ID, exploratory_constructive_play, ...) VALUES ('sample_name_coll', 'sample_name_spec', 'sample_plant_id', 0, 1, ....);
 ```
 
 ```
-TODO: Plan another query
+Tag a plant with id 1 with a tag with id 9:
+INSERT INTO tagging (plant_id, tag_id) VALUES (1, 9);
 ```
 
-TODO: ...
+```
+Get a user with the provided password and username:
+SELECT * FROM users WHERE username='provided_username' AND password='provided_password';
+```
 
 
 ### Code Planning (Milestone 1, Milestone 2, Milestone 3, Final Submission)
@@ -226,15 +231,29 @@ TODO: ...
 > Tip: Break this up by pages. It makes it easier to plan.
 
 ```
-TODO: WRITE YOUR PSEUDOCODE HERE, between the back-tick lines.
+Consumers view page:
+
+1. Check if sort is selected, and if so, execute the corresponding SQL query to sort the catalog. Add sticky values for the sort.
+2. Check if a filter is selected, execute the corresponding SQL query to filter the catalog. Add sticky values for the filters selected.
 ```
 
 ```
-TODO: WRITE MORE PSEUDOCODE HERE, between the back-tick lines.
+Login page:
+
+1. Obtain the username and the password that were provided when submitting the login form.
+2. Send a SELECT SQL query to check if there exists a record with the provided username and password.
+3. If there exists a record, redirect user to administrators view.
+4. If there is no such record, provide corrective feedback.
 ```
 
-TODO: ...
+```
+Administrators view page:
 
+1. Check if sort is selected, and if so, execute the corresponding SQL query to sort the catalog.
+2. Check if a filter is selected, execute the corresponding SQL query to filter the catalog.
+3. Check if the add form was submitted. If so, validate the form, provide corrective feedback if necessary, add sticky values. If the form was valid, add the plant to the catalog using an SQL INSERT query.
+4. Check if a tag was selected from the drop-down menu. If so, send an SQL query to update the tagging table.
+```
 
 ### Accessibility Audit (Final Submission)
 
