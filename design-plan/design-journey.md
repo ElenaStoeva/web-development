@@ -110,19 +110,39 @@ _Administrator_ Goal 3: Search through existing database and sort and filter cat
 
 _Initial Designs / Design Iterations:_
 
-TODO
+The pictures below are the initial design that I planned during the lab session on Friday.
 
+
+![Initial Design - Consumers](initial_design2.jpg)
+
+![Initial Design - Login Page](initial_design1.jpg)
+
+![Initial Design - Administrators](initial_design3.jpg)
+
+In this design, there is a administrator view and a consumer view. The consumers only sees a sort and a filter form while the administrators also see an add form and their name in the right top corner.
 
 _Final Design:_
 
-TODO
+The pictures below contain a revised version of the previous design.
+
+![Consumers View](consumers.jpg)
+
+This is the page that the consumers see. They can sort and filter the catalog using the buttons at the top. When they click on an image from the catalog, they are redirected to a details page for this specific plant.
+
+![Login Page](login.jpg)
+
+This is the login page that the administrators use to log in.
+
+![Administrators View](administrators.jpg)
+
+This is the administrators view of the site. They can sort and filter the data like the consumers. They can also add plants through a form, add tags, and remove plants.
 
 
 ### Design Pattern Explanation/Reflection (Milestone 1)
 
 > Write a one paragraph (6-8 sentences) reflection explaining how you used design patterns for media catalogs in your site's final design.
 
-TODO
+One design pattern that I used is having a catalog of images in rows, each of each leading to a page specific for this image. I will also have a sort option with a drop-down menu, which is another common element in media catalogs. There will also be a filtering button, which opens a small window with filter options. This is something that I have seen in many media catalogs as well.
 
 
 ### Cognitive Styles Explanation/Reflection (Milestone 1)
@@ -131,12 +151,12 @@ TODO
 
 _Consumer Cognitive Styles Reflection:_
 
-TODO
+Abi would be able to view the whole catalog and get an idea about what the catalog looks like (comprehensive information processing style). Since Abi has lower self confidence about doing unfamiliar computing tasks, the design will be simple without many unnecesary features, which would make Abi feel more comfortable working with. This also correleates with Abi's attitude toward Risk: Abi's life is a little complicated and she rarely has spare time. Therefore, this simplified version will help her navigate through the website without spending too much time.
 
 
 _Site Administrator Cognitive Styles Reflection:_
 
-TODO
+Tim's Motivations is to learn all the available functionality and likes tinkering and exploring the menu items and functions of the software. This design will allow him to do so by playing around with the sort and filter buttons. The Delete Plant button will also allow him to experiment with the add form by adding a plant and then removing it. The administrator's view of the website is a bit more complicated than the view for consumers but this is okay, since Tim has high confidence in his abilities with technology.
 
 
 ## Implementation Plan (Milestone 1, Milestone 2, Milestone 3, Final Submission)
