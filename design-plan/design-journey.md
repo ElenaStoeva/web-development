@@ -167,11 +167,42 @@ Tim's Motivations is to learn all the available functionality and likes tinkerin
 > **Hint: You probably need a table for "entries", `tags`, `"entry"_tags`** (stores relationship between entries and tags), and a `users` tables.
 > **Hint: For foreign keys, use the singular name of the table + _id.** For example: `image_id` and `tag_id` for the `image_tags` (tags for each image) table.
 
-Table: TODO
+Table: users
 
-- field1: TYPE {constraints...},
-- field2...
-- TODO
+- user_id: INT {PK, NN, U, AI}
+- username: STR {NN, U}
+- password: STR {NN}
+
+
+Table: plants
+
+- id: INT {PK, NN, U, AI}
+- plant_name_coll: STRING {NN}
+- plant_name_spec: STRING {NN, U}
+- plant_ID: STRING {NN, U}
+- exploratory_constructive_play: INT {NN}
+- exploratory_sensory_play: INT {NN}
+- physical_play: INT {NN}
+- imaginative_play: INT {NN}
+- restorative_play: INT {NN}
+- expressive_play: INT {NN}
+- play_with_rules: INT {NN}
+- bio_play: INT {NN}
+
+
+Table: tags
+
+- tag_id: INT {PK, NN, U, AI}
+- tag_name: STR {NN, U}
+
+
+Table: tagging
+
+- id: INT {PK, NN, U, AI}
+- plant_id: INT {NN, U}
+- tag_id: INT {NN, U}
+
+In the last combination, each combination of plant_id and tag_id should be unique.
 
 
 ### Database Query Plan (Milestone 1, Milestone 2, Milestone 3, Final Submission)
