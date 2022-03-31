@@ -92,3 +92,18 @@ h1 {
 .catalog {
   padding-bottom: 50px;
 }
+
+div.gallery {
+  margin: 40px;
+  float: left;
+  width: 200px;
+}
+
+div.name {
+  text-align: center;
+}
+
+div.sort-filter {
+  float: right;
+  margin: 10px;
+}
