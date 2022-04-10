@@ -127,8 +127,8 @@ VALUES
 
 CREATE TABLE taggings (
 	id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-  plant_id TEXT NOT NULL PRIMARY KEY,
-	tag_id TEXT NOT NULL PRIMARY KEY
+  plant_id TEXT NOT NULL,
+	tag_id TEXT NOT NULL
 );
 
 --- Initial tagging records ---
@@ -154,7 +154,7 @@ VALUES
 CREATE TABLE users (
 	user_id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	username TEXT NOT NULL UNIQUE,
-  password TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL UNIQUE
 );
 
 --- Initial user records ---

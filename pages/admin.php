@@ -1,5 +1,5 @@
 <?php
-$db = open_sqlite_db('tmp/site.sqlite');
+$db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
 // Feedback message classes:
 $sort_filter_feedback_class = 'hidden';
@@ -67,7 +67,7 @@ if (isset($_POST['add_plant'])) {
   if ($form_valid) {
     $result = exec_sql_query(
       $db,
-      "INSERT INTO seed (plant_name_coll, plant_name_spec, plant_ID, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:plant_name_coll, :plant_name_spec, :plant_ID,:exploratory_constructive_play, :exploratory_sensory_play, :physical_play, :imaginative_play, :restorative_play, :expressive_play, :play_with_rules, :bio_play);",
+      "INSERT INTO plants (plant_name_coll, plant_name_spec, plant_ID, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:plant_name_coll, :plant_name_spec, :plant_ID,:exploratory_constructive_play, :exploratory_sensory_play, :physical_play, :imaginative_play, :restorative_play, :expressive_play, :play_with_rules, :bio_play);",
       array(
         ':plant_name_coll' => $name_coll,
         ':plant_name_spec' => $name_spec,
@@ -120,7 +120,7 @@ if (
   # The user clicked on the Apply button without providing any input.
   # No sort/filter criteria in the form are selected.
   $sort_filter_feedback_class = '';
-  $records = exec_sql_query($db, 'SELECT * FROM seed')->fetchAll();
+  $records = exec_sql_query($db, 'SELECT * FROM plants')->fetchAll();
 } else if (isset($_GET['reset'])) {
   # The user clicked on the Reset button.
   # Clear up sticky values.
@@ -139,7 +139,7 @@ if (
   $sticky_filter_play_with_rules = '';
   $sticky_filter_bio_play = '';
 
-  $records = exec_sql_query($db, 'SELECT * FROM seed')->fetchAll();
+  $records = exec_sql_query($db, 'SELECT * FROM plants')->fetchAll();
 } else {
   # Some sort/filter criteria in the form are selected.
 
@@ -154,7 +154,7 @@ if (
   $sticky_filter_play_with_rules = ($filter_play_with_rules ? 'checked' : '');
   $sticky_filter_bio_play = ($filter_bio_play ? 'checked' : '');
 
-  $sql_select_part = 'SELECT * FROM seed';
+  $sql_select_part = 'SELECT * FROM plants';
 
   $sql_where_part = '';
   $sql_filter_expressions = array();
