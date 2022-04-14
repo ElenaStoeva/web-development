@@ -47,6 +47,7 @@ $records = exec_sql_query($db, $sql_query)->fetchAll();
       $plant_ID = $record['plant_ID'];
       $file_name = "./public/photos/" . $plant_ID . ".jpg";
       if (!file_exists($file_name)) {
+        // Image Source: (original work) Elena Stoeva
         $file_name = "/public/photos/image_placeholder.jpg";
       }
     ?>
