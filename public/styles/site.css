@@ -25,7 +25,7 @@
 }
 
 .tile-header h4 {
-  margin : 0;
+  margin: 0;
   font-style: italic;
 }
 
@@ -34,7 +34,7 @@
 }
 
 .left h2 {
-  margin-bottom : 5px;
+  margin-bottom: 5px;
 }
 
 .right h2 {
@@ -81,7 +81,7 @@
   margin-bottom: 0px;
 }
 
-form{
+form {
   margin-bottom: 50px;
 }
 
@@ -105,5 +105,17 @@ div.name {
 
 div.sort-filter {
   float: right;
-  margin: 10px;
+  margin-left: 20px;
+}
+
+div.login {
+  float: left;
+}
+
+div.row {
+  margin-bottom: 40px;
+}
+
+div.catalog-gallery {
+  padding: 40px;
 }
