@@ -125,26 +125,28 @@ VALUES
 
 --- Tagging Table ---
 
-CREATE TABLE taggings (
+CREATE TABLE plant_tags (
 	id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
   plant_id TEXT NOT NULL,
-	tag_id TEXT NOT NULL
+	tag_id TEXT NOT NULL,
+  FOREIGN KEY (plant_id) REFERENCES plants(id),
+  FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
 );
 
 --- Initial tagging records ---
 
 INSERT INTO
-  taggings (id, plant_id, tag_id)
+  plant_tags (id, plant_id, tag_id)
 VALUES
   (1, 1, 1);
 
 INSERT INTO
-  taggings (id, plant_id, tag_id)
+  plant_tags (id, plant_id, tag_id)
 VALUES
   (2, 2, 3);
 
 INSERT INTO
-  taggings (id, plant_id, tag_id)
+  plant_tags (id, plant_id, tag_id)
 VALUES
   (3, 3, 4);
 
