@@ -23,7 +23,7 @@ You can use bullet points and lists, or full paragraphs, or a combo, whichever i
 
 _Consumer_: parents with developing children. They care about creating nature-rich spaces and plan to garden using this site's data in order to provide high quality nature-rich places on a smaller scale around their homes and communities.
 
-_Site Administrator_: members of the Playful Plants project. They develop a (searchable) database of playful plants that can support a range of nature play experiences, provide ideas and plant collections for themed nature play spaces & gardens, and develop a web resource for sharing these resources, including the ability to tailor selections and print plant lists.
+_Site Administrator_: members of the Playful Plants project. They develop a (searchable) database of playful plants that can support a range of nature play experiences, provide ideas and plant collections for themed nature play spaces & gardens, and develop a web resource for sharing these resources, including the ability to tailor selections based on tags.
 
 
 ### _Consumer_ Audience Goals (Milestone 1)
@@ -39,19 +39,19 @@ _Consumer_ Goal 1: View plants that are well-suited for play
 - **Rationale & Additional Notes** _Justify your decisions; additional notes._
   - A searchable catalog of plants will allow the consumers to view all plants in the database of the Playful Plants project.
 
-_Consumer_ Goal 2: Sort and filter catalog of plants
+_Consumer_ Goal 2: Sort catalog of plants
 
 - **Design Ideas and Choices** _How will you meet those goals in your design?_
-  - Providing a sort/filter form.
+  - Providing a sort form.
 - **Rationale & Additional Notes** _Justify your decisions; additional notes._
-  - A sort/filter form will allow the consumers to sort and filter the catalog of plants based on their needs.
+  - A sort form will allow the consumers to sort the catalog of plants based on their needs.
 
-_Consumer_ Goal 3: Print a list of plants
+_Consumer_ Goal 3: Filter catalog of plants based on tags and other plant features
 
 - **Design Ideas and Choices** _How will you meet those goals in your design?_
-  - Design the catalog in a format that is well-suited for printing.
+  - Providing a filter form.
 - **Rationale & Additional Notes** _Justify your decisions; additional notes._
-  - If the design of the site provides a catalog format that is well-suited for printing, the consumers will be able to easily print a list of the plants that they are interested in.
+  - A filter form will allow the consumers to filter the catalog so that they can view only plants with specific tags and features.
 
 ### _Consumer_ Persona (Milestone 1)
 
@@ -77,9 +77,9 @@ _Administrator_ Goal 1: Develop a searchable database of playful plants that can
 _Administrator_ Goal 2: Provide ideas & plant collections for themed nature play spaces & gardens.
 
 - **Design Ideas and Choices** _How will you meet those goals in your design?_
-  - By providing a functuinality for tagging plants in the catalog.
+  - By providing a functuinality for plant_tags plants in the catalog.
 - **Rationale & Additional Notes** _Justify your decisions; additional notes._
-  - By tagging the plants in the catalog, the administrators will be able to tailor the plant selections and provide ideas for themes nature play spaces.
+  - By plant_tags the plants in the catalog, the administrators will be able to tailor the plant selections and provide ideas for themes nature play spaces.
 
 _Administrator_ Goal 3: Search through existing database and sort and filter catalog.
 
@@ -121,11 +121,11 @@ The pictures below are the initial design that I planned during the lab session 
 
 In this design, there is a administrator view and a consumer view. The consumers only sees a sort and a filter form while the administrators also see an add form and their name in the right top corner.
 
-_Final Design:_
+_Iteration 1:_
 
-The pictures below contain a revised version of the previous design.
+The pictures below contain a revised version of the initial design.
 
-![Consumers View](consumers.jpg)
+![Consumers View - Iteration 1](consumers_iteration1.jpg)
 
 This is the page that the consumers see. They can sort and filter the catalog using the buttons at the top. When they click on an image from the catalog, they are redirected to a details page for this specific plant.
 
@@ -133,10 +133,23 @@ This is the page that the consumers see. They can sort and filter the catalog us
 
 This is the login page that the administrators use to log in.
 
-![Administrators View](administrators.jpg)
+![Administrators View - Iteration 1](administrators_iteration1.jpg)
 
 This is the administrators view of the site. They can sort and filter the data like the consumers. They can also add plants through a form, add tags, and remove plants.
 
+
+_Iteration 2:_
+
+Based on the feedback that I received from Milestone 1, I revised the design of the consumer view and the administrators view. The revised design is shown in the pictures below:
+
+![Consumers View - Iteration 2](consumers_iteration2.jpg)
+
+This is the new design for the consumers' view of the web site. Now it is made for a use on a mobile phone device, as per the requirements. Again, Abi can sort and filter the catalog using the buttons at the top. Each sort and and filter criteria is a drop down which contains options. For example, the Tag drop down contains check boxes for existing tags, while the Sort drop down contains radio buttons for different sorting criteria. Also, when the Abi clicks on an image from the catalog, she is redirected to a details page for this specific plant.
+
+
+![Administrators View - Iteration 2](administrators_iteration2.jpg)
+
+This is the new administrators view of the site. Now it contains an Edit button for each entry, as required for this project. When Tim clicks on the Edit button for some plant, he is redirected to a new page that contains a form with the properties of this plant. Tim will be able to change the values of the inputs in the form, and when he submits the form, these new values will be applied to the database.
 
 ### Design Pattern Explanation/Reflection (Milestone 1)
 
@@ -196,11 +209,13 @@ Table: tags
 - tag_name: STR {NN, U}
 
 
-Table: tagging
+Table: plant_tags
 
 - id: INT {PK, NN, U, AI}
-- plant_id: INT {NN, U}
+- plant_id: INT {NN, U, For}
 - tag_id: INT {NN, U}
+- FOREIGN KEY (plant_id) REFERENCES plants(id)
+- FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
 
 In the last combination, each combination of plant_id and tag_id should be unique.
 
@@ -216,7 +231,7 @@ INSERT INTO plants (plant_name_coll, plant_name_spec, plant_ID, exploratory_cons
 
 ```
 Tag a plant with id 1 with a tag with id 9:
-INSERT INTO tagging (plant_id, tag_id) VALUES (1, 9);
+INSERT INTO plant_tags (plant_id, tag_id) VALUES (1, 9);
 ```
 
 ```
@@ -224,6 +239,30 @@ Get a user with the provided password and username:
 SELECT * FROM users WHERE username='provided_username' AND password='provided_password';
 ```
 
+```
+Sort catalog by plant name:
+SELECT * FROM plants ORDER BY plant_name_coll ASC;
+```
+
+```
+Filter catalog by tag name:
+SELECT * FROM plants
+INNER JOIN plant_tags ON plants.id = plant_tags.plant_id
+INNER JOIN tags ON plant_tags.tag_id = tags.tag_id
+WHERE tags.tag_name = 'Orange';
+```
+
+```
+Delete a plant:
+DELETE FROM plants
+WHERE plant_ID = 'TT_17';
+```
+
+```
+Delete a tag from a deletef plant:
+DELETE FROM plant_tags
+WHERE plant_id = 'TT_17';
+```
 
 ### Code Planning (Milestone 1, Milestone 2, Milestone 3, Final Submission)
 
@@ -233,15 +272,17 @@ SELECT * FROM users WHERE username='provided_username' AND password='provided_pa
 ```
 Consumers view page:
 
-1. Check if sort is selected, and if so, execute the corresponding SQL query to sort the catalog. Add sticky values for the sort.
-2. Check if a filter is selected, execute the corresponding SQL query to filter the catalog. Add sticky values for the filters selected.
+1. Check if sort is selected, and if so, add the corresponding "ORBER BY" part to the main SQL query to sort the catalog. Add sticky values for the sort.
+2. Check if a filter is selected, add the corresponding 'WHERE' part to the main SQL query to filter the catalog. Add sticky values for the filters selected.
+3. Execute the main SQL query to obtain all plants that meet the selected sort and filter criteria.
+4. In the media catalog, for each entry, get the plant_ID of the corresponding plant, and add an image whose name is the same as this plant_ID. Also, add a link that leads to a details page for this entry with corresponding parameters.
 ```
 
 ```
 Login page:
 
 1. Obtain the username and the password that were provided when submitting the login form.
-2. Send a SELECT SQL query to check if there exists a record with the provided username and password.
+2. Send a SELECT SQL query to check if there exists a record in the users table with the provided username and password.
 3. If there exists a record, redirect user to administrators view.
 4. If there is no such record, provide corrective feedback.
 ```
@@ -249,10 +290,21 @@ Login page:
 ```
 Administrators view page:
 
-1. Check if sort is selected, and if so, execute the corresponding SQL query to sort the catalog.
-2. Check if a filter is selected, execute the corresponding SQL query to filter the catalog.
-3. Check if the add form was submitted. If so, validate the form, provide corrective feedback if necessary, add sticky values. If the form was valid, add the plant to the catalog using an SQL INSERT query.
-4. Check if a tag was selected from the drop-down menu. If so, send an SQL query to update the tagging table.
+1. Check if sort is selected, and if so, add the corresponding "ORBER BY" part to the main SQL query to sort the catalog. Add sticky values for the sort.
+2. Check if a filter is selected, add the corresponding 'WHERE' part to the main SQL query to filter the catalog. Add sticky values for the filters selected.
+3. Execute the main SQL query to obtain all plants that meet the selected sort and filter criteria.
+4. Check if the add form was submitted. If so, validate the form. If the form was valid, add the plant to the catalog using an SQL INSERT query. If not, provide corrective feedback.
+5. Check if the Delete button under some plant entry was clicked. If so, execute a DELETE SQL query to delete the corresponding plant from the database.
+6. Check if the Edit button under some plant entry was clicked. If so, redirect the user to a page that contains a form for editing this plant, with its current values pre-filled in the form.
+```
+
+```
+Details plant page:
+
+1. Check if the form was submitted.
+2. If it was submitted, validate the form and provide corrective feedback if necessary.
+3. Execute an SQL query to update the corresponding record in the database.
+4. If the plant was successfully updated, display a confirmation message.
 ```
 
 ### Accessibility Audit (Final Submission)
