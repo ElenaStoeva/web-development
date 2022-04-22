@@ -143,7 +143,7 @@ if (
   # The user clicked on the Apply button without providing any input.
   # No sort/filter criteria in the form are selected.
   $sort_filter_feedback_class = '';
-  $records = exec_sql_query($db, 'SELECT * FROM plants')->fetchAll();
+  $records = exec_sql_query($db, 'SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id ')->fetchAll();
 } else if (isset($_GET['reset'])) {
   # The user clicked on the Reset button.
   # Clear up sticky values.
@@ -162,7 +162,7 @@ if (
   $sticky_filter_play_with_rules = '';
   $sticky_filter_bio_play = '';
 
-  $records = exec_sql_query($db, 'SELECT * FROM plants')->fetchAll();
+  $records = exec_sql_query($db, 'SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id ')->fetchAll();
 } else {
   # Some sort/filter criteria in the form are selected.
 
@@ -177,7 +177,8 @@ if (
   $sticky_filter_play_with_rules = ($filter_play_with_rules ? 'checked' : '');
   $sticky_filter_bio_play = ($filter_bio_play ? 'checked' : '');
 
-  $sql_select_part = 'SELECT * FROM plants';
+  $sql_select_part = 'SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id
+  LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id ';
 
   $sql_where_part = '';
   $sql_filter_expressions = array();
@@ -442,12 +443,19 @@ if (
               </ul>
             </li>
             <div>
-              Tag plant:
-              <select name="tag">
-                <option value="Tag1">Tag1</option>
-                <option value="Tag2">Tag2</option>
-                <option value="Tag3">Tag3</option>
-              </select>
+              Tag: <?php echo htmlspecialchars($record['tag_name']) ?>
+              <!-- <select name="tag">
+                <option value="tag" selected><?php echo htmlspecialchars($record['tag_name']) ?></option>
+                <?php
+                $tags = ['Shrub', 'Grass', 'Vine', 'Tree', 'Flower', 'Groundcover', 'Other'];
+                foreach ($tags as $tag) {
+
+                  if ($tag != $record['tag_name']) { ?>
+                    <option value="tag"><?php echo htmlspecialchars($tag) ?></option>
+                <?php
+                  }
+                } ?>
+              </select> -->
             </div>
 
             <form method="get" action="/admin">
