@@ -110,17 +110,37 @@ CREATE TABLE tags (
 INSERT INTO
   tags (tag_id, tag_name)
 VALUES
-  (1, 'Red');
+  (1, 'Shrub');
 
 INSERT INTO
   tags (tag_id, tag_name)
 VALUES
-  (2, 'Orange');
+  (2, 'Grass');
 
 INSERT INTO
   tags (tag_id, tag_name)
 VALUES
-  (3, 'Yellow');
+  (3, 'Vine');
+
+INSERT INTO
+  tags (tag_id, tag_name)
+VALUES
+  (4, 'Tree');
+
+INSERT INTO
+  tags (tag_id, tag_name)
+VALUES
+  (5, 'Flower');
+
+INSERT INTO
+  tags (tag_id, tag_name)
+VALUES
+  (6, 'Groundcover');
+
+INSERT INTO
+  tags (tag_id, tag_name)
+VALUES
+  (7, 'Other');
 
 
 --- Tagging Table ---
@@ -138,7 +158,7 @@ CREATE TABLE plant_tags (
 INSERT INTO
   plant_tags (id, plant_id, tag_id)
 VALUES
-  (1, 1, 1);
+  (1, 1, 7);
 
 INSERT INTO
   plant_tags (id, plant_id, tag_id)
@@ -148,8 +168,72 @@ VALUES
 INSERT INTO
   plant_tags (id, plant_id, tag_id)
 VALUES
-  (3, 3, 4);
+  (3, 3, 3);
 
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (4, 4, 5);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (5, 5, 5);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (6, 6, 2);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (7, 7, 7);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (8, 8, 2);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (9, 9, 4);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (10, 10, 1);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (11, 11, 5);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (12, 12, 4);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (13, 13, 5);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (14, 14, 5);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (15, 15, 1);
+
+INSERT INTO
+  plant_tags (id, plant_id, tag_id)
+VALUES
+  (16, 16, 7);
 
 --- Users Table ---
 
