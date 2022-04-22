@@ -233,7 +233,7 @@ if (
     <div class="column left">
 
       <h2>Add Plant</h2>
-      <form method="post" action="/" novalidate>
+      <form method="post" action="/admin" novalidate>
 
         <div class="form-input">
           <div class="feedback <?php echo $name_coll_feedback_class; ?>">Please enter a colloquial plant name.</div>
