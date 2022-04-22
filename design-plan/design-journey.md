@@ -249,7 +249,7 @@ Filter catalog by tag name:
 SELECT * FROM plants
 INNER JOIN plant_tags ON plants.id = plant_tags.plant_id
 INNER JOIN tags ON plant_tags.tag_id = tags.tag_id
-WHERE tags.tag_name = 'Orange';
+WHERE tags.tag_name = 'Tree';
 ```
 
 ```
@@ -264,6 +264,14 @@ DELETE FROM plant_tags
 WHERE plant_id = 'TT_17';
 ```
 
+```
+Get all details of a plant with plant_ID FE_1 inclding its tags:
+SELECT plant_name_coll, plant_name_spec, exploratory_constructive_play, ..., tags.tag_name FROM plants
+LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id
+LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id
+WHERE plants.plant_ID = 'FE_1';
+```
+
 ### Code Planning (Milestone 1, Milestone 2, Milestone 3, Final Submission)
 
 > Plan any PHP code you'll need here using pseudocode.
@@ -272,39 +280,41 @@ WHERE plant_id = 'TT_17';
 ```
 Consumers view page:
 
-1. Check if sort is selected, and if so, add the corresponding "ORBER BY" part to the main SQL query to sort the catalog. Add sticky values for the sort.
-2. Check if a filter is selected, add the corresponding 'WHERE' part to the main SQL query to filter the catalog. Add sticky values for the filters selected.
-3. Execute the main SQL query to obtain all plants that meet the selected sort and filter criteria.
-4. In the media catalog, for each entry, get the plant_ID of the corresponding plant, and add an image whose name is the same as this plant_ID. Also, add a link that leads to a details page for this entry with corresponding parameters.
+1. Check if sort is selected, and if so, add the corresponding "ORBER BY" part to the main SQL query to sort the catalog. Add sticky values for the sort. (Milestone 3)
+2. Check if a filter is selected, add the corresponding 'WHERE' part to the main SQL query to filter the catalog. Add sticky values for the filters selected. (Milestone 3)
+3. Execute the main SQL query to obtain all plants that meet the selected sort and filter criteria. (Milestone 2)
+4. In the media catalog, for each entry, get the plant_ID of the corresponding plant, and add an image whose name is the same as this plant_ID. Also, add a link that leads to a details page for this entry with corresponding parameters. (Milestone 2)
 ```
 
 ```
 Login page:
 
-1. Obtain the username and the password that were provided when submitting the login form.
-2. Send a SELECT SQL query to check if there exists a record in the users table with the provided username and password.
-3. If there exists a record, redirect user to administrators view.
-4. If there is no such record, provide corrective feedback.
+1. Obtain the username and the password that were provided when submitting the login form. (Final Submission)
+2. Send a SELECT SQL query to check if there exists a record in the users table with the provided username and password. (Final Submission)
+3. If there exists a record, redirect user to administrators view. (Final Submission)
+4. If there is no such record, provide corrective feedback. (Final Submission)
 ```
 
 ```
 Administrators view page:
 
-1. Check if sort is selected, and if so, add the corresponding "ORBER BY" part to the main SQL query to sort the catalog. Add sticky values for the sort.
-2. Check if a filter is selected, add the corresponding 'WHERE' part to the main SQL query to filter the catalog. Add sticky values for the filters selected.
-3. Execute the main SQL query to obtain all plants that meet the selected sort and filter criteria.
-4. Check if the add form was submitted. If so, validate the form. If the form was valid, add the plant to the catalog using an SQL INSERT query. If not, provide corrective feedback.
-5. Check if the Delete button under some plant entry was clicked. If so, execute a DELETE SQL query to delete the corresponding plant from the database.
-6. Check if the Edit button under some plant entry was clicked. If so, redirect the user to a page that contains a form for editing this plant, with its current values pre-filled in the form.
+1. Check if sort is selected, and if so, add the corresponding "ORBER BY" part to the main SQL query to sort the catalog. Add sticky values for the sort. (Milestone 3)
+2. Check if a filter is selected, add the corresponding 'WHERE' part to the main SQL query to filter the catalog. Add sticky values for the filters selected. (Milestone 3)
+3. Execute the main SQL query to obtain all plants that meet the selected sort and filter criteria. (Milestone 3)
+4. Check if the add form was submitted. If so, validate the form. If the form was valid, add the plant to the catalog using an SQL INSERT query. If not, provide corrective feedback. (Milestone 3)
+5. Check if the Delete button under some plant entry was clicked. If so, execute a DELETE SQL query to delete the corresponding plant from the database. (Milestone 3)
+6. Check if the Edit button under some plant entry was clicked. If so, redirect the user to a page that contains a form for editing this plant, with its current values pre-filled in the form. (Milestone 3)
+5. Add a field to the "Add Plant" form for image uploading. (Final submisson)
 ```
 
 ```
-Details plant page:
+Edit plant page:
 
-1. Check if the form was submitted.
-2. If it was submitted, validate the form and provide corrective feedback if necessary.
-3. Execute an SQL query to update the corresponding record in the database.
-4. If the plant was successfully updated, display a confirmation message.
+1. Check if the form was submitted. (Milestone 3)
+2. If it was submitted, validate the form and provide corrective feedback if necessary. (Milestone 3)
+3. Execute an SQL query to update the corresponding record in the database. (Milestone 3)
+4. If the plant was successfully updated, display a confirmation message. (Milestone 3)
+5. Add a form field for image uploading. (Final submisson)
 ```
 
 ### Accessibility Audit (Final Submission)
