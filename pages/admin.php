@@ -25,6 +25,13 @@ $sticky_bio_play = '';
 
 
 $delete_plant_id = $_GET['delete-plant'] ?? NULL;
+$sql_order_part = '';
+$order = $_GET['order'] ?? NULL;
+if ($order == 'asc') {
+  $sql_order_part = ' ORDER BY plant_name_coll ASC';
+} else if ($order == 'desc') {
+  $sql_order_part = ' ORDER BY plant_name_coll DESC';
+}
 
 if ($delete_plant_id) {
 
@@ -143,7 +150,7 @@ if (
   # The user clicked on the Apply button without providing any input.
   # No sort/filter criteria in the form are selected.
   $sort_filter_feedback_class = '';
-  $records = exec_sql_query($db, 'SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id ')->fetchAll();
+  $records = exec_sql_query($db, 'SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id ' . $sql_order_part)->fetchAll();
 } else if (isset($_GET['reset'])) {
   # The user clicked on the Reset button.
   # Clear up sticky values.
@@ -162,7 +169,7 @@ if (
   $sticky_filter_play_with_rules = '';
   $sticky_filter_bio_play = '';
 
-  $records = exec_sql_query($db, 'SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id ')->fetchAll();
+  $records = exec_sql_query($db, 'SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id ' . $sql_order_part)->fetchAll();
 } else {
   # Some sort/filter criteria in the form are selected.
 
@@ -219,14 +226,6 @@ if (
     $sql_where_part = ' WHERE ' . implode(' AND ', $sql_filter_expressions);
   }
 
-  if (empty($sort_by)) {
-    $sql_order_part = ';';
-  } else if ($sort_by == 'name_asc') {
-    $sql_order_part = ' ORDER BY plant_name_coll ASC;';
-  } else if ($sort_by == 'name_desc') {
-    $sql_order_part = ' ORDER BY plant_name_coll DESC;';
-  }
-
 
   // build the final query
   $sql_query = $sql_select_part . $sql_where_part . $sql_order_part;
@@ -255,10 +254,10 @@ if (
 
   <div class="sort-filter">
     Sort:
-    <select name="sort">
-      <option value="Name Ascending"></option>
-      <option value="Name Ascending">Name Ascending</option>
-      <option value="Name Descending">Name Descending</option>
+    <select name="sort" onchange="location = this.value;">
+      <option value="/"></option>
+      <option value="/admin?order=asc">Name Ascending</option>
+      <option value="/admin?order=desc">Name Descending</option>
     </select>
   </div>
   <div class="filter-dropdown sort-filter">

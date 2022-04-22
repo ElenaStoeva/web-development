@@ -2,8 +2,16 @@
 
 $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
+$sql_order_part = '';
+$order = $_GET['order'] ?? NULL;
+if ($order == 'asc') {
+  $sql_order_part = ' ORDER BY plant_name_coll ASC';
+} else if ($order == 'desc') {
+  $sql_order_part = ' ORDER BY plant_name_coll DESC';
+}
+
 // This query will be changed for future implementations.
-$sql_query = 'SELECT * FROM plants';
+$sql_query = 'SELECT * FROM plants' . $sql_order_part;
 $records = exec_sql_query($db, $sql_query)->fetchAll();
 
 ?>
@@ -32,10 +40,10 @@ $records = exec_sql_query($db, $sql_query)->fetchAll();
 
     <div class="sort-filter">
       Sort:
-      <select name="sort">
-        <option value="Name Ascending"></option>
-        <option value="Name Ascending">Name Ascending</option>
-        <option value="Name Descending">Name Descending</option>
+      <select name="sort" onchange="location = this.value;">
+        <option value="/"></option>
+        <option value="/?order=asc">Name Ascending</option>
+        <option value="/?order=desc">Name Descending</option>
       </select>
     </div>
     <div class="filter-dropdown sort-filter">
