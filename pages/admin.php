@@ -325,6 +325,19 @@ if (
         </div>
 
         <div>
+          Tag:
+          <select name="tag">
+            <?php
+            $tags = ['Shrub', 'Grass', 'Vine', 'Tree', 'Flower', 'Groundcover', 'Other'];
+            foreach ($tags as $tag) { ?>
+              <option value="tag"><?php echo htmlspecialchars($tag) ?></option>
+            <?php
+            }
+            ?>
+          </select>
+        </div>
+
+        <div>
           <input type="submit" name="add_plant" value="Add">
         </div>
       </form>
@@ -391,9 +404,14 @@ if (
       <div class="catalog">
         <ul>
           <?php
-          foreach ($records as $record) { ?>
+          foreach ($records as $record) {
+            $file_name = "./public/photos/" . $record['plant_ID'] . ".jpg";
+            if (!file_exists($file_name)) {
+              // Image Source: (original work) Elena Stoeva
+              $file_name = "/public/photos/image_placeholder.jpg";
+            } ?>
             <li class="tile">
-              <a href="/details"><img src="/public/photos/SH_11_1.jpg" alt="Plant"></a>
+              <a href="/details"><img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant" width="200"></a>
               <div class="tile-header">
                 <h3><?php echo htmlspecialchars($record['plant_name_coll']); ?></h3>
                 <h4><?php echo htmlspecialchars($record['plant_name_spec']); ?></h4>
@@ -444,28 +462,26 @@ if (
             </li>
             <div>
               Tag: <?php echo htmlspecialchars($record['tag_name']) ?>
-              <!-- <select name="tag">
-                <option value="tag" selected><?php echo htmlspecialchars($record['tag_name']) ?></option>
-                <?php
-                $tags = ['Shrub', 'Grass', 'Vine', 'Tree', 'Flower', 'Groundcover', 'Other'];
-                foreach ($tags as $tag) {
-
-                  if ($tag != $record['tag_name']) { ?>
-                    <option value="tag"><?php echo htmlspecialchars($tag) ?></option>
-                <?php
-                  }
-                } ?>
-              </select> -->
             </div>
+
+            <form method="get" action="/edit">
+
+              <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['plant_ID']); ?>" />
+
+              <button type="submit">
+                Edit
+              </button>
+            </form>
 
             <form method="get" action="/admin">
 
               <input type="hidden" name="delete-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
 
               <button type="submit">
-                Delete Plant
+                Delete
               </button>
             </form>
+
             <hr>
           <?php } ?>
         </ul>
