@@ -316,15 +316,53 @@ if (
         <div class="sort-filter">
           Sort:
           <select name="sort">
+            <option value="Name Ascending"></option>
             <option value="Name Ascending">Name Ascending</option>
             <option value="Name Descending">Name Descending</option>
           </select>
         </div>
-        <div class="sort-filter">
-          <button>Filter</button>
+        <div class="filter-dropdown sort-filter">
+          <button onclick="clickFilter()" class="dropbtn">Filter</button>
+          <div id="filterDropdown" class="filter-dropdown-content">
+            <ul>
+              <li>
+                <input type="checkbox" id="shrub_tag" name="shrub_tag" />
+                <label for="shrub_tag">Shrub</label>
+              </li>
+              <li>
+                <input type="checkbox" id="grass_tag" name="grass_tag" />
+                <label for="grass_tag">Grass</label>
+              </li>
+              <li>
+                <input type="checkbox" id="vine_tag" name="vine_tag" />
+                <label for="vine_tag">Vine</label>
+              </li>
+              <li>
+                <input type="checkbox" id="tree_tag" name="tree_tag" />
+                <label for="tree_tag">Tree</label>
+              </li>
+              <li>
+                <input type="checkbox" id="flower_tag" name="flower_tag" />
+                <label for="flower_tag">Flower</label>
+              </li>
+              <li>
+                <input type="checkbox" id="groundcover_tag" name="groundcover_tag" />
+                <label for="groundcover_tag">Groundcover</label>
+              </li>
+              <li>
+                <input type="checkbox" id="other_tag" name="other_tag" />
+                <label for="other_tag">Other</label>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
+      <script>
+        function clickFilter() {
+          document.getElementById("filterDropdown").classList.toggle("show");
+        }
+      </script>
 
       <div class="catalog">
         <ul>
