@@ -24,6 +24,29 @@ $sticky_play_with_rules = '';
 $sticky_bio_play = '';
 
 
+$delete_plant_id = $_GET['delete-plant'] ?? NULL;
+
+if ($delete_plant_id) {
+
+  // Delete plant from plants table
+  exec_sql_query(
+    $db,
+    "DELETE FROM plants WHERE (id = :plant_id);",
+    array(
+      ':plant_id' => $delete_plant_id
+    )
+  );
+
+  // Delete plant from plant_tags table
+  exec_sql_query(
+    $db,
+    "DELETE FROM plant_tags WHERE (plant_id = :plant_id);",
+    array(
+      ':plant_id' => $delete_plant_id
+    )
+  );
+}
+
 if (isset($_POST['add_plant'])) {
   $name_coll = trim($_POST['plant-name-coll']);
   $name_spec = trim($_POST['plant-name-spec']);
@@ -427,7 +450,14 @@ if (
               </select>
             </div>
 
-            <button>Delete Plant</button>
+            <form method="get" action="/admin">
+
+              <input type="hidden" name="delete-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
+
+              <button type="submit">
+                Delete Plant
+              </button>
+            </form>
             <hr>
           <?php } ?>
         </ul>
