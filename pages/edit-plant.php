@@ -136,7 +136,10 @@ if ($record) {
     if ($form_valid) {
       $result = exec_sql_query(
         $db,
-        "INSERT INTO plants (plant_name_coll, plant_name_spec, plant_ID, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:plant_name_coll, :plant_name_spec, :plant_ID,:exploratory_constructive_play, :exploratory_sensory_play, :physical_play, :imaginative_play, :restorative_play, :expressive_play, :play_with_rules, :bio_play);",
+        "UPDATE plants
+        SET plant_name_coll = :plant_name_coll, plant_name_spec = :plant_name_spec, plant_ID = :plant_ID, exploratory_constructive_play = :exploratory_constructive_play, exploratory_sensory_play = :exploratory_sensory_play, physical_play = :physical_play,
+        imaginative_play = :imaginative_play, restorative_play = :restorative_play, expressive_play = :expressive_play, play_with_rules = :play_with_rules, bio_play = :bio_play
+        WHERE plant_ID = :id;",
         array(
           ':plant_name_coll' => $name_coll,
           ':plant_name_spec' => $name_spec,
@@ -148,7 +151,8 @@ if ($record) {
           ':restorative_play' => ($restorative_play ? 1 : 0),
           ':expressive_play' => ($expressive_play ? 1 : 0),
           ':play_with_rules' => ($play_with_rules ? 1 : 0),
-          ':bio_play' => ($bio_play ? 1 : 0)
+          ':bio_play' => ($bio_play ? 1 : 0),
+          ':id' => $update_id
         )
       );
 
