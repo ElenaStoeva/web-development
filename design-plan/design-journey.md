@@ -281,7 +281,7 @@ WHERE plants.plant_ID = 'FE_1';
 Consumers view page:
 
 1. Check if sort is selected, and if so, add the corresponding "ORBER BY" part to the main SQL query to sort the catalog. Add sticky values for the sort. (Milestone 3)
-2. Check if a filter is selected, add the corresponding 'WHERE' part to the main SQL query to filter the catalog. Add sticky values for the filters selected. (Milestone 3)
+2. Check if a filter is selected, add the corresponding 'WHERE' part to the main SQL query to filter the catalog. Add sticky values for the filters selected. (Milestone 3 - Not finished)
 3. Execute the main SQL query to obtain all plants that meet the selected sort and filter criteria. (Milestone 2)
 4. In the media catalog, for each entry, get the plant_ID of the corresponding plant, and add an image whose name is the same as this plant_ID. Also, add a link that leads to a details page for this entry with corresponding parameters. (Milestone 2)
 ```
@@ -299,7 +299,7 @@ Login page:
 Administrators view page:
 
 1. Check if sort is selected, and if so, add the corresponding "ORBER BY" part to the main SQL query to sort the catalog. Add sticky values for the sort. (Milestone 3)
-2. Check if a filter is selected, add the corresponding 'WHERE' part to the main SQL query to filter the catalog. Add sticky values for the filters selected. (Milestone 3)
+2. Check if a filter is selected, add the corresponding 'WHERE' part to the main SQL query to filter the catalog. Add sticky values for the filters selected. (Milestone 3 - Not finished)
 3. Execute the main SQL query to obtain all plants that meet the selected sort and filter criteria. (Milestone 3)
 4. Check if the add form was submitted. If so, validate the form. If the form was valid, add the plant to the catalog using an SQL INSERT query. If not, provide corrective feedback. (Milestone 3)
 5. Check if the Delete button under some plant entry was clicked. If so, execute a DELETE SQL query to delete the corresponding plant from the database. (Milestone 3)
@@ -314,7 +314,20 @@ Edit plant page:
 2. If it was submitted, validate the form and provide corrective feedback if necessary. (Milestone 3)
 3. Execute an SQL query to update the corresponding record in the database. (Milestone 3)
 4. If the plant was successfully updated, display a confirmation message. (Milestone 3)
-5. Add a form field for image uploading. (Final submisson)
+5. Add a form field for image uploading. (Final submisson - Not finished)
+```
+
+```
+Final submission plan:
+
+1. Currently, when you submit the form on the edit page for a plant, you would get an error. I will fix this for the final submission.
+2. Add image uploads to edit page and Add plant form.
+3. Make filters work - currently they don't do anything.
+4. Improve design of filter buttons as per feedback from Milestone 3.
+5. Support multiple tags per plant. Currently, each plant can only have one tag.
+6. Add more user credentials to the database.
+7. Implement user access.
+8. Polish design of website.
 ```
 
 ### Accessibility Audit (Final Submission)
