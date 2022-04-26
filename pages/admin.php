@@ -1,12 +1,15 @@
 <?php
 $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
+define("MAX_FILE_SIZE", 1000000);
+
 // Feedback message classes:
 $sort_filter_feedback_class = 'hidden';
 $name_coll_feedback_class = 'hidden';
 $name_spec_feedback_class = 'hidden';
 $plant_id_feedback_class = 'hidden';
 $play_type_feedback_class = 'hidden';
+$file_feedback_class = 'hidden';
 
 $plant_inserted = False;
 
@@ -384,6 +387,15 @@ if (
             }
             ?>
           </select>
+        </div>
+
+        Upload Image:
+        <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
+
+        <p class="feedback <?php echo $file_feedback_class; ?>">Please select an SVG file.</p>
+        <div class="label-input">
+          <label for="upload-file">File:</label>
+          <input id="upload-file" type="file" name="file" accept=".jpg" />
         </div>
 
         <div>
