@@ -140,7 +140,6 @@ if ($record) {
     // --- Handle Uploads ---
 
     $upload = $_FILES['jpg-file'];
-    $form_valid = True;
 
     if ($upload['error'] == UPLOAD_ERR_OK) {
       $upload_filename = basename($upload['name']);

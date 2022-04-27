@@ -328,7 +328,7 @@ Final submission plan:
 6. Add more user credentials to the database.
 7. Implement user access.
 8. Polish design of website.
-9. Clean up and organize code.
+9. Clean up and organize code. (DONE)
 10. Fix filled values in Edit form on the Edit page.
 11. Test all pages.
 ```

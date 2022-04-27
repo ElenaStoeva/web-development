@@ -1,26 +1,30 @@
 <?php
 
-$db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
+// --- Define Variables ---
 
+$db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 $uri = $_SERVER['REQUEST_URI'];
 
+// --- Handle Sorting ---
+
 $sql_order_part = '';
-$sql_where_part = '';
 $order = $_GET['order'] ?? NULL;
-$filter = $_GET['filter'] ?? NULL;
-
-
 if ($order == 'asc') {
   $sql_order_part = ' ORDER BY plant_name_coll ASC';
 } else if ($order == 'desc') {
   $sql_order_part = ' ORDER BY plant_name_coll DESC';
 }
 
+// --- Handle Filtering ---
+
+$sql_where_part = '';
+$filter = $_GET['filter'] ?? NULL;
 if ($filter) {
   $sql_where_part = ' WHERE tags.tag_name = "' . $filter . '"';
 }
 
-// This query will be changed for future implementations.
+// --- Get Records From Database ---
+
 $sql_query = 'SELECT * FROM plants INNER JOIN plant_tags on plants.id = plant_tags.plant_id INNER JOIN tags on tags.tag_id = plant_tags.tag_id' . $sql_where_part . $sql_order_part;
 $records = exec_sql_query($db, $sql_query)->fetchAll();
 

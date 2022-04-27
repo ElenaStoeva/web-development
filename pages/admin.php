@@ -1,8 +1,36 @@
 <?php
-$db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
+// --- Define Variables ---
+
+$db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 define("MAX_FILE_SIZE", 1000000);
 $uri = $_SERVER['REQUEST_URI'];
+
+// --- Handle Deleting Plant ---
+
+$delete_plant_id = $_GET['delete-plant'] ?? NULL;
+if ($delete_plant_id) {
+
+  // Delete plant from plants table
+  exec_sql_query(
+    $db,
+    "DELETE FROM plants WHERE (id = :plant_id);",
+    array(
+      ':plant_id' => $delete_plant_id
+    )
+  );
+
+  // Delete plant from plant_tags table
+  exec_sql_query(
+    $db,
+    "DELETE FROM plant_tags WHERE (plant_id = :plant_id);",
+    array(
+      ':plant_id' => $delete_plant_id
+    )
+  );
+}
+
+// --- Handle Add Form ---
 
 // Feedback message classes:
 $sort_filter_feedback_class = 'hidden';
@@ -26,42 +54,6 @@ $sticky_restorative_play = '';
 $sticky_expressive_play = '';
 $sticky_play_with_rules = '';
 $sticky_bio_play = '';
-
-
-$delete_plant_id = $_GET['delete-plant'] ?? NULL;
-$sql_order_part = '';
-$order = $_GET['order'] ?? NULL;
-if ($order == 'asc') {
-  $sql_order_part = ' ORDER BY plant_name_coll ASC';
-} else if ($order == 'desc') {
-  $sql_order_part = ' ORDER BY plant_name_coll DESC';
-}
-
-$sql_where_part = '';
-if ($filter) {
-  $sql_where_part = ' WHERE tags.tag_name = "' . $filter . '"';
-}
-
-if ($delete_plant_id) {
-
-  // Delete plant from plants table
-  exec_sql_query(
-    $db,
-    "DELETE FROM plants WHERE (id = :plant_id);",
-    array(
-      ':plant_id' => $delete_plant_id
-    )
-  );
-
-  // Delete plant from plant_tags table
-  exec_sql_query(
-    $db,
-    "DELETE FROM plant_tags WHERE (plant_id = :plant_id);",
-    array(
-      ':plant_id' => $delete_plant_id
-    )
-  );
-}
 
 if (isset($_POST['add_plant'])) {
   $name_coll = trim($_POST['plant-name-coll']);
@@ -106,7 +98,6 @@ if (isset($_POST['add_plant'])) {
   // --- Handle Uploads ---
 
   $upload = $_FILES['jpg-file'];
-  $form_valid = True;
 
   if ($upload['error'] == UPLOAD_ERR_OK) {
     $upload_filename = basename($upload['name']);
@@ -144,8 +135,7 @@ if (isset($_POST['add_plant'])) {
       move_uploaded_file($upload["tmp_name"], $id_filename);
     }
   } else {
-    $sticky_name_coll = $upload_ext;
-    // $sticky_name_coll = $name_coll;
+    $sticky_name_coll = $name_coll;
     $sticky_name_spec = $name_spec;
     $sticky_plant_id = $plant_id;
     $sticky_exploratory_constructive_play = (!$exploratory_constructive_play ? '' : 'checked');
@@ -159,106 +149,26 @@ if (isset($_POST['add_plant'])) {
   }
 }
 
-$sort_by = $_GET['radio_name'];
-$filter_exploratory_constructive_play = (bool)($_GET['filter_exploratory_constructive_play'] ?? NULL);
-$filter_exploratory_sensory_play = (bool)($_GET['filter_exploratory_sensory_play'] ?? NULL);
-$filter_physical_play = (bool)($_GET['filter_physical_play'] ?? NULL);
-$filter_imaginative_play = (bool)($_GET['filter_imaginative_play'] ?? NULL);
-$filter_restorative_play = (bool)($_GET['filter_restorative_play'] ?? NULL);
-$filter_expressive_play = (bool)($_GET['filter_expressive_play'] ?? NULL);
-$filter_play_with_rules = (bool)($_GET['filter_play_with_rules'] ?? NULL);
-$filter_bio_play = (bool)($_GET['filter_bio_play'] ?? NULL);
+// --- Handle Sorting ---
 
-# Validate filter/sort form
-if (
-  isset($_GET['apply']) && empty($sort_by) && !$filter_exploratory_constructive_play && !$filter_exploratory_sensory_play
-  && !$filter_physical_play && !$filter_imaginative_play && !$filter_restorative_play
-  && !$filter_expressive_play && !$filter_play_with_rules && !$filter_bio_play
-) {
-  # The user clicked on the Apply button without providing any input.
-  # No sort/filter criteria in the form are selected.
-  $sort_filter_feedback_class = '';
-  $records = exec_sql_query($db, 'SELECT * FROM plants INNER JOIN plant_tags on plants.id = plant_tags.plant_id INNER JOIN tags on tags.tag_id = plant_tags.tag_id ' . $sql_where_part . $sql_order_part)->fetchAll();
-} else if (isset($_GET['reset'])) {
-  # The user clicked on the Reset button.
-  # Clear up sticky values.
-  # Show whole catalog without any filters and sorting.
-
-  $sticky_sort_asc = '';
-  $sticky_sort_desc = '';
-  $sticky_filter_name_coll = '';
-  $sticky_filter_name_spec = '';
-  $sticky_filter_exploratory_constructive_play = '';
-  $sticky_filter_exploratory_sensory_play = '';
-  $sticky_filter_physical_play = '';
-  $sticky_filter_imaginative_play = '';
-  $sticky_filter_restorative_play = '';
-  $sticky_filter_expressive_play = '';
-  $sticky_filter_play_with_rules = '';
-  $sticky_filter_bio_play = '';
-
-  $records = exec_sql_query($db, 'SELECT * FROM plants INNER JOIN plant_tags on plants.id = plant_tags.plant_id INNER JOIN tags on tags.tag_id = plant_tags.tag_id ' . $sql_order_part)->fetchAll();
-} else {
-  # Some sort/filter criteria in the form are selected.
-
-  $sticky_sort_asc = ($sort_by == 'name_asc' ? 'checked' : '');
-  $sticky_sort_desc = ($sort_by == 'name_desc' ? 'checked' : '');
-  $sticky_filter_exploratory_constructive_play = (empty($filter_exploratory_constructive_play) ? '' : 'checked');
-  $sticky_filter_exploratory_sensory_play = ($filter_exploratory_sensory_play ? 'checked' : '');
-  $sticky_filter_physical_play = ($filter_physical_play ? 'checked' : '');
-  $sticky_filter_imaginative_play = ($filter_imaginative_play ? 'checked' : '');
-  $sticky_filter_restorative_play = ($filter_restorative_play ? 'checked' : '');
-  $sticky_filter_expressive_play = ($filter_expressive_play ? 'checked' : '');
-  $sticky_filter_play_with_rules = ($filter_play_with_rules ? 'checked' : '');
-  $sticky_filter_bio_play = ($filter_bio_play ? 'checked' : '');
-
-  $sql_select_part = 'SELECT * FROM plants INNER JOIN plant_tags on plants.id = plant_tags.plant_id INNER JOIN tags on tags.tag_id = plant_tags.tag_id ';
-
-  // $sql_where_part = '';
-  // $sql_filter_expressions = array();
-
-  // if ($filter_exploratory_constructive_play) {
-  //   array_push($sql_filter_expressions, "(exploratory_constructive_play = 1)");
-  // }
-
-  // if ($filter_exploratory_sensory_play) {
-  //   array_push($sql_filter_expressions, "(exploratory_sensory_play = 1)");
-  // }
-
-  // if ($filter_physical_play) {
-  //   array_push($sql_filter_expressions, "(physical_play = 1)");
-  // }
-
-  // if ($filter_imaginative_play) {
-  //   array_push($sql_filter_expressions, "(imaginative_play = 1)");
-  // }
-
-  // if ($filter_restorative_play) {
-  //   array_push($sql_filter_expressions, "(restorative_play = 1)");
-  // }
-
-  // if ($filter_expressive_play) {
-  //   array_push($sql_filter_expressions, "(expressive_play = 1)");
-  // }
-
-  // if ($filter_play_with_rules) {
-  //   array_push($sql_filter_expressions, "(play_with_rules = 1)");
-  // }
-
-  // if ($filter_bio_play) {
-  //   array_push($sql_filter_expressions, "(bio_play = 1)");
-  // }
-
-  // if (count($sql_filter_expressions) > 0) {
-  //   $sql_where_part = ' WHERE ' . implode(' AND ', $sql_filter_expressions);
-  // }
-
-
-  // build the final query
-  $sql_query = $sql_select_part . $sql_where_part . $sql_order_part;
-  $records = exec_sql_query($db, $sql_query)->fetchAll();
+$sql_order_part = '';
+$order = $_GET['order'] ?? NULL;
+if ($order == 'asc') {
+  $sql_order_part = ' ORDER BY plant_name_coll ASC';
+} else if ($order == 'desc') {
+  $sql_order_part = ' ORDER BY plant_name_coll DESC';
 }
 
+// --- Handle Filtering ---
+
+$sql_where_part = '';
+if ($filter) {
+  $sql_where_part = ' WHERE tags.tag_name = "' . $filter . '"';
+}
+
+// --- Get Records From Database ---
+$sql_query = 'SELECT * FROM plants LEFT OUTER JOIN plant_tags on plants.id = plant_tags.plant_id LEFT OUTER JOIN tags on tags.tag_id = plant_tags.tag_id' . $sql_where_part . $sql_order_part;
+$records = exec_sql_query($db, $sql_query)->fetchAll();
 
 ?>
 <!DOCTYPE html>
@@ -290,36 +200,36 @@ if (
   <div class="filter-dropdown sort-filter">
     <button onclick="clickFilter()" class="dropbtn">Filter <i class="arrow"></i></button>
     <div id="filterDropdown" class="filter-dropdown-content">
-    <ul>
-          <li>
-            <input onclick="location = '/?filter=Shrub';" type="checkbox" id="shrub_tag" name="shrub_tag" />
-            <label for="shrub_tag">Shrub</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Grass';" type="checkbox" id="grass_tag" name="grass_tag" />
-            <label for="grass_tag">Grass</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Vine';" type="checkbox" id="vine_tag" name="vine_tag" />
-            <label for="vine_tag">Vine</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Ttree';" type="checkbox" id="tree_tag" name="tree_tag" />
-            <label for="tree_tag">Tree</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Flower';" type="checkbox" id="flower_tag" name="flower_tag" />
-            <label for="flower_tag">Flower</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Groundcover';" type="checkbox" id="groundcover_tag" name="groundcover_tag" />
-            <label for="groundcover_tag">Groundcover</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Other';" type="checkbox" id="other_tag" name="other_tag" />
-            <label for="other_tag">Other</label>
-          </li>
-        </ul>
+      <ul>
+        <li>
+          <input onclick="location = '/?filter=Shrub';" type="checkbox" id="shrub_tag" name="shrub_tag" />
+          <label for="shrub_tag">Shrub</label>
+        </li>
+        <li>
+          <input onclick="location = '/?filter=Grass';" type="checkbox" id="grass_tag" name="grass_tag" />
+          <label for="grass_tag">Grass</label>
+        </li>
+        <li>
+          <input onclick="location = '/?filter=Vine';" type="checkbox" id="vine_tag" name="vine_tag" />
+          <label for="vine_tag">Vine</label>
+        </li>
+        <li>
+          <input onclick="location = '/?filter=Ttree';" type="checkbox" id="tree_tag" name="tree_tag" />
+          <label for="tree_tag">Tree</label>
+        </li>
+        <li>
+          <input onclick="location = '/?filter=Flower';" type="checkbox" id="flower_tag" name="flower_tag" />
+          <label for="flower_tag">Flower</label>
+        </li>
+        <li>
+          <input onclick="location = '/?filter=Groundcover';" type="checkbox" id="groundcover_tag" name="groundcover_tag" />
+          <label for="groundcover_tag">Groundcover</label>
+        </li>
+        <li>
+          <input onclick="location = '/?filter=Other';" type="checkbox" id="other_tag" name="other_tag" />
+          <label for="other_tag">Other</label>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -333,7 +243,7 @@ if (
     <div class="column left">
 
       <h2>Add Plant</h2>
-      <form method="post" enctype="multipart/form-data" action="/admin" novalidate>
+      <form method="post" enctype="multipart/form-data" action=<?php echo '"' . $uri . '"' ?> novalidate>
 
         <div class="form-input">
           <div class="feedback <?php echo $name_coll_feedback_class; ?>">Please enter a colloquial plant name.</div>
