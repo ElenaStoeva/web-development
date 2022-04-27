@@ -2,9 +2,12 @@
 
 $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
-$sql_order_part = '';
-$order = $_GET['order'] ?? NULL;
+$uri = $_SERVER['REQUEST_URI'];
 
+$sql_order_part = '';
+$sql_where_part = '';
+$order = $_GET['order'] ?? NULL;
+$filter = $_GET['filter'] ?? NULL;
 
 
 if ($order == 'asc') {
@@ -13,8 +16,12 @@ if ($order == 'asc') {
   $sql_order_part = ' ORDER BY plant_name_coll DESC';
 }
 
+if ($filter) {
+  $sql_where_part = ' WHERE tags.tag_name = "' . $filter . '"';
+}
+
 // This query will be changed for future implementations.
-$sql_query = 'SELECT * FROM plants' . $sql_order_part;
+$sql_query = 'SELECT * FROM plants INNER JOIN plant_tags on plants.id = plant_tags.plant_id INNER JOIN tags on tags.tag_id = plant_tags.tag_id' . $sql_where_part . $sql_order_part;
 $records = exec_sql_query($db, $sql_query)->fetchAll();
 
 ?>
@@ -54,37 +61,36 @@ $records = exec_sql_query($db, $sql_query)->fetchAll();
       <div id="filterDropdown" class="filter-dropdown-content">
         <ul>
           <li>
-            <input type="checkbox" id="shrub_tag" name="shrub_tag" />
+            <input onclick="location = '/?filter=Shrub';" type="checkbox" id="shrub_tag" name="shrub_tag" />
             <label for="shrub_tag">Shrub</label>
           </li>
           <li>
-            <input type="checkbox" id="grass_tag" name="grass_tag" />
+            <input onclick="location = '/?filter=Grass';" type="checkbox" id="grass_tag" name="grass_tag" />
             <label for="grass_tag">Grass</label>
           </li>
           <li>
-            <input type="checkbox" id="vine_tag" name="vine_tag" />
+            <input onclick="location = '/?filter=Vine';" type="checkbox" id="vine_tag" name="vine_tag" />
             <label for="vine_tag">Vine</label>
           </li>
           <li>
-            <input type="checkbox" id="tree_tag" name="tree_tag" />
+            <input onclick="location = '/?filter=Ttree';" type="checkbox" id="tree_tag" name="tree_tag" />
             <label for="tree_tag">Tree</label>
           </li>
           <li>
-            <input type="checkbox" id="flower_tag" name="flower_tag" />
+            <input onclick="location = '/?filter=Flower';" type="checkbox" id="flower_tag" name="flower_tag" />
             <label for="flower_tag">Flower</label>
           </li>
           <li>
-            <input type="checkbox" id="groundcover_tag" name="groundcover_tag" />
+            <input onclick="location = '/?filter=Groundcover';" type="checkbox" id="groundcover_tag" name="groundcover_tag" />
             <label for="groundcover_tag">Groundcover</label>
           </li>
           <li>
-            <input type="checkbox" id="other_tag" name="other_tag" />
+            <input onclick="location = '/?filter=Other';" type="checkbox" id="other_tag" name="other_tag" />
             <label for="other_tag">Other</label>
           </li>
         </ul>
       </div>
     </div>
-
 
     <script>
       function clickFilter() {

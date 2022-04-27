@@ -2,6 +2,7 @@
 $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
 define("MAX_FILE_SIZE", 1000000);
+$uri = $_SERVER['REQUEST_URI'];
 
 // Feedback message classes:
 $sort_filter_feedback_class = 'hidden';
@@ -34,6 +35,11 @@ if ($order == 'asc') {
   $sql_order_part = ' ORDER BY plant_name_coll ASC';
 } else if ($order == 'desc') {
   $sql_order_part = ' ORDER BY plant_name_coll DESC';
+}
+
+$sql_where_part = '';
+if ($filter) {
+  $sql_where_part = ' WHERE tags.tag_name = "' . $filter . '"';
 }
 
 if ($delete_plant_id) {
@@ -172,7 +178,7 @@ if (
   # The user clicked on the Apply button without providing any input.
   # No sort/filter criteria in the form are selected.
   $sort_filter_feedback_class = '';
-  $records = exec_sql_query($db, 'SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id ' . $sql_order_part)->fetchAll();
+  $records = exec_sql_query($db, 'SELECT * FROM plants INNER JOIN plant_tags on plants.id = plant_tags.plant_id INNER JOIN tags on tags.tag_id = plant_tags.tag_id ' . $sql_where_part . $sql_order_part)->fetchAll();
 } else if (isset($_GET['reset'])) {
   # The user clicked on the Reset button.
   # Clear up sticky values.
@@ -191,7 +197,7 @@ if (
   $sticky_filter_play_with_rules = '';
   $sticky_filter_bio_play = '';
 
-  $records = exec_sql_query($db, 'SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id ' . $sql_order_part)->fetchAll();
+  $records = exec_sql_query($db, 'SELECT * FROM plants INNER JOIN plant_tags on plants.id = plant_tags.plant_id INNER JOIN tags on tags.tag_id = plant_tags.tag_id ' . $sql_order_part)->fetchAll();
 } else {
   # Some sort/filter criteria in the form are selected.
 
@@ -206,47 +212,46 @@ if (
   $sticky_filter_play_with_rules = ($filter_play_with_rules ? 'checked' : '');
   $sticky_filter_bio_play = ($filter_bio_play ? 'checked' : '');
 
-  $sql_select_part = 'SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id
-  LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id ';
+  $sql_select_part = 'SELECT * FROM plants INNER JOIN plant_tags on plants.id = plant_tags.plant_id INNER JOIN tags on tags.tag_id = plant_tags.tag_id ';
 
-  $sql_where_part = '';
-  $sql_filter_expressions = array();
+  // $sql_where_part = '';
+  // $sql_filter_expressions = array();
 
-  if ($filter_exploratory_constructive_play) {
-    array_push($sql_filter_expressions, "(exploratory_constructive_play = 1)");
-  }
+  // if ($filter_exploratory_constructive_play) {
+  //   array_push($sql_filter_expressions, "(exploratory_constructive_play = 1)");
+  // }
 
-  if ($filter_exploratory_sensory_play) {
-    array_push($sql_filter_expressions, "(exploratory_sensory_play = 1)");
-  }
+  // if ($filter_exploratory_sensory_play) {
+  //   array_push($sql_filter_expressions, "(exploratory_sensory_play = 1)");
+  // }
 
-  if ($filter_physical_play) {
-    array_push($sql_filter_expressions, "(physical_play = 1)");
-  }
+  // if ($filter_physical_play) {
+  //   array_push($sql_filter_expressions, "(physical_play = 1)");
+  // }
 
-  if ($filter_imaginative_play) {
-    array_push($sql_filter_expressions, "(imaginative_play = 1)");
-  }
+  // if ($filter_imaginative_play) {
+  //   array_push($sql_filter_expressions, "(imaginative_play = 1)");
+  // }
 
-  if ($filter_restorative_play) {
-    array_push($sql_filter_expressions, "(restorative_play = 1)");
-  }
+  // if ($filter_restorative_play) {
+  //   array_push($sql_filter_expressions, "(restorative_play = 1)");
+  // }
 
-  if ($filter_expressive_play) {
-    array_push($sql_filter_expressions, "(expressive_play = 1)");
-  }
+  // if ($filter_expressive_play) {
+  //   array_push($sql_filter_expressions, "(expressive_play = 1)");
+  // }
 
-  if ($filter_play_with_rules) {
-    array_push($sql_filter_expressions, "(play_with_rules = 1)");
-  }
+  // if ($filter_play_with_rules) {
+  //   array_push($sql_filter_expressions, "(play_with_rules = 1)");
+  // }
 
-  if ($filter_bio_play) {
-    array_push($sql_filter_expressions, "(bio_play = 1)");
-  }
+  // if ($filter_bio_play) {
+  //   array_push($sql_filter_expressions, "(bio_play = 1)");
+  // }
 
-  if (count($sql_filter_expressions) > 0) {
-    $sql_where_part = ' WHERE ' . implode(' AND ', $sql_filter_expressions);
-  }
+  // if (count($sql_filter_expressions) > 0) {
+  //   $sql_where_part = ' WHERE ' . implode(' AND ', $sql_filter_expressions);
+  // }
 
 
   // build the final query
@@ -285,36 +290,36 @@ if (
   <div class="filter-dropdown sort-filter">
     <button onclick="clickFilter()" class="dropbtn">Filter <i class="arrow"></i></button>
     <div id="filterDropdown" class="filter-dropdown-content">
-      <ul>
-        <li>
-          <input type="checkbox" id="shrub_tag" name="shrub_tag" />
-          <label for="shrub_tag">Shrub</label>
-        </li>
-        <li>
-          <input type="checkbox" id="grass_tag" name="grass_tag" />
-          <label for="grass_tag">Grass</label>
-        </li>
-        <li>
-          <input type="checkbox" id="vine_tag" name="vine_tag" />
-          <label for="vine_tag">Vine</label>
-        </li>
-        <li>
-          <input type="checkbox" id="tree_tag" name="tree_tag" />
-          <label for="tree_tag">Tree</label>
-        </li>
-        <li>
-          <input type="checkbox" id="flower_tag" name="flower_tag" />
-          <label for="flower_tag">Flower</label>
-        </li>
-        <li>
-          <input type="checkbox" id="groundcover_tag" name="groundcover_tag" />
-          <label for="groundcover_tag">Groundcover</label>
-        </li>
-        <li>
-          <input type="checkbox" id="other_tag" name="other_tag" />
-          <label for="other_tag">Other</label>
-        </li>
-      </ul>
+    <ul>
+          <li>
+            <input onclick="location = '/?filter=Shrub';" type="checkbox" id="shrub_tag" name="shrub_tag" />
+            <label for="shrub_tag">Shrub</label>
+          </li>
+          <li>
+            <input onclick="location = '/?filter=Grass';" type="checkbox" id="grass_tag" name="grass_tag" />
+            <label for="grass_tag">Grass</label>
+          </li>
+          <li>
+            <input onclick="location = '/?filter=Vine';" type="checkbox" id="vine_tag" name="vine_tag" />
+            <label for="vine_tag">Vine</label>
+          </li>
+          <li>
+            <input onclick="location = '/?filter=Ttree';" type="checkbox" id="tree_tag" name="tree_tag" />
+            <label for="tree_tag">Tree</label>
+          </li>
+          <li>
+            <input onclick="location = '/?filter=Flower';" type="checkbox" id="flower_tag" name="flower_tag" />
+            <label for="flower_tag">Flower</label>
+          </li>
+          <li>
+            <input onclick="location = '/?filter=Groundcover';" type="checkbox" id="groundcover_tag" name="groundcover_tag" />
+            <label for="groundcover_tag">Groundcover</label>
+          </li>
+          <li>
+            <input onclick="location = '/?filter=Other';" type="checkbox" id="other_tag" name="other_tag" />
+            <label for="other_tag">Other</label>
+          </li>
+        </ul>
     </div>
   </div>
 
