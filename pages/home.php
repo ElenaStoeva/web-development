@@ -4,6 +4,9 @@ $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
 $sql_order_part = '';
 $order = $_GET['order'] ?? NULL;
+
+
+
 if ($order == 'asc') {
   $sql_order_part = ' ORDER BY plant_name_coll ASC';
 } else if ($order == 'desc') {
@@ -47,7 +50,7 @@ $records = exec_sql_query($db, $sql_query)->fetchAll();
       </select>
     </div>
     <div class="filter-dropdown sort-filter">
-      <button onclick="clickFilter()" class="dropbtn">Filter</button>
+      <button onclick="clickFilter()" class="dropbtn">Filter <i class="arrow"></i></button>
       <div id="filterDropdown" class="filter-dropdown-content">
         <ul>
           <li>

@@ -283,7 +283,7 @@ if (
     </select>
   </div>
   <div class="filter-dropdown sort-filter">
-    <button onclick="clickFilter()" class="dropbtn">Filter</button>
+    <button onclick="clickFilter()" class="dropbtn">Filter <i class="arrow"></i></button>
     <div id="filterDropdown" class="filter-dropdown-content">
       <ul>
         <li>
