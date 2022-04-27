@@ -328,12 +328,13 @@ Final submission plan:
 4. Improve design of filter buttons as per feedback from Milestone 3. (DONE)
 5. Support multiple tags per plant. Currently, each plant can only have one tag.
 6. Add more user credentials to the database.
-7. Implement user access.
+7. Implement user access. (DONE)
 8. Implement login/logout control.
 9. Polish design of website.
 10. Clean up and organize code. (DONE)
 11. Fix filled values in Edit form on the Edit page.
 12. Test all pages.
+13. From the login page, redirect the user to the page that they wanted to access initially.
 ```
 
 ### Accessibility Audit (Final Submission)
