@@ -321,7 +321,7 @@ Edit plant page:
 Final submission plan:
 
 1. Currently, when you submit the form on the edit page for a plant, you would get an error. I will fix this for the final submission. (DONE)
-2. Add image uploads to edit page and Add plant form.
+2. Add image uploads to edit page and Add plant form. (DONE)
 3. Make filters work - currently they don't do anything.
 4. Improve design of filter buttons as per feedback from Milestone 3.
 5. Support multiple tags per plant. Currently, each plant can only have one tag.
