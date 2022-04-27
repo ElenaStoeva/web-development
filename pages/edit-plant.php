@@ -136,6 +136,24 @@ if ($record) {
       $play_type_feedback_class = '';
     }
 
+
+    // --- Handle Uploads ---
+
+    $upload = $_FILES['jpg-file'];
+    $form_valid = True;
+
+    if ($upload['error'] == UPLOAD_ERR_OK) {
+      $upload_filename = basename($upload['name']);
+      $upload_ext = strtolower(pathinfo($upload_filename, PATHINFO_EXTENSION));
+
+      // This site only accepts JPG files
+      if (!in_array($upload_ext, array("jpg"))) {
+        $form_valid = False;
+      }
+    } else {
+      $form_valid = False;
+    }
+
     if ($form_valid) {
       $result = exec_sql_query(
         $db,
@@ -160,7 +178,8 @@ if ($record) {
       );
 
       if ($result) {
-        $plant_inserted = True;
+        $id_filename = 'public/photos/' . $plant_id . '.' . $upload_ext;
+        move_uploaded_file($upload["tmp_name"], $id_filename);
       }
     } else {
       $sticky_name_coll = $name_coll;
@@ -195,7 +214,7 @@ if ($record) {
 
   <div class="tile">
     <img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant Image" width="400">
-    <form action="/edit?<?php echo http_build_query(array('edit-plant' => $plant_id)); ?>" method="post" novalidate>
+    <form action="/edit?<?php echo http_build_query(array('edit-plant' => $plant_id)); ?>" method="post" enctype="multipart/form-data" novalidate>
 
       <div class="form-input">
         <div class="feedback <?php echo $name_coll_feedback_class; ?>">Please enter a colloquial plant name.</div>
@@ -279,13 +298,12 @@ if ($record) {
 
       <input type="hidden" name="update-id" value="<?php echo htmlspecialchars($plant_id); ?>" />
 
-      Update Image:
       <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
 
-      <p class="feedback <?php echo $file_feedback_class; ?>">Please select an SVG file.</p>
+      <p class="feedback <?php echo $file_feedback_class; ?>">Please select a JPG file.</p>
       <div class="label-input">
-        <label for="upload-file">File:</label>
-        <input id="upload-file" type="file" name="file" accept=".jpg" />
+        <label for="upload-file">Upload JPG Image:</label>
+        <input id="upload-file" type="file" name="jpg-file" accept=".jpg" />
       </div>
 
       <div>
