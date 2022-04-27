@@ -1,6 +1,11 @@
 <?php
 require_once('includes/db.php');
 
+// check login/logout params
+include_once("includes/sessions.php");
+$session_messages = array();
+process_session_params($db, $session_messages);
+
 function match_routes($uri, $routes)
 {
   if (is_array($routes)) {
