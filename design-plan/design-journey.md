@@ -305,6 +305,7 @@ Administrators view page:
 5. Check if the Delete button under some plant entry was clicked. If so, execute a DELETE SQL query to delete the corresponding plant from the database. (Milestone 3)
 6. Check if the Edit button under some plant entry was clicked. If so, redirect the user to a page that contains a form for editing this plant, with its current values pre-filled in the form. (Milestone 3)
 5. Add a field to the "Add Plant" form for image uploading. (Final submisson)
+6. User Access: only administrators have access to this page. Therefore, I will check if the user is logged in before displaying this page. If the user is not logged in, a Login form will be displayed. (Final Submission)
 ```
 
 ```
@@ -315,6 +316,7 @@ Edit plant page:
 3. Execute an SQL query to update the corresponding record in the database. (Milestone 3)
 4. If the plant was successfully updated, display a confirmation message. (Milestone 3)
 5. Add a form field for image uploading. (Final submisson - Not finished)
+6. User Access: only administrators have access to this page. Therefore, I will check if the user is logged in before displaying this page. If the user is not logged in, a Login form will be displayed. (Final Submission)
 ```
 
 ```
@@ -327,10 +329,11 @@ Final submission plan:
 5. Support multiple tags per plant. Currently, each plant can only have one tag.
 6. Add more user credentials to the database.
 7. Implement user access.
-8. Polish design of website.
-9. Clean up and organize code. (DONE)
-10. Fix filled values in Edit form on the Edit page.
-11. Test all pages.
+8. Implement login/logout control.
+9. Polish design of website.
+10. Clean up and organize code. (DONE)
+11. Fix filled values in Edit form on the Edit page.
+12. Test all pages.
 ```
 
 ### Accessibility Audit (Final Submission)
