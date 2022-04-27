@@ -1,5 +1,6 @@
 <?php
 require_once('includes/db.php');
+$db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
 // check login/logout params
 include_once("includes/sessions.php");
@@ -30,8 +31,6 @@ if (preg_match('/^\/public\//', $request_uri) || $request_uri == '/favicon.ico')
   return False;
 } else if (match_routes($request_uri, '/')) {
   require 'pages/home.php';
-} else if (match_routes($request_uri, '/login')) {
-  require 'pages/login.php';
 } else if (match_routes($request_uri, '/admin')) {
   require 'pages/admin.php';
 } else if (match_routes($request_uri, '/details')) {

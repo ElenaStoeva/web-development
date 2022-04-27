@@ -47,7 +47,7 @@ $records = exec_sql_query($db, $sql_query)->fetchAll();
 
   <div class="row">
     <div class="login">
-      <a href="/login">
+      <a href="/admin">
         <button>Log In</button>
       </a>
     </div>

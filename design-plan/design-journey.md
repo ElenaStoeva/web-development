@@ -287,15 +287,6 @@ Consumers view page:
 ```
 
 ```
-Login page:
-
-1. Obtain the username and the password that were provided when submitting the login form. (Final Submission)
-2. Send a SELECT SQL query to check if there exists a record in the users table with the provided username and password. (Final Submission)
-3. If there exists a record, redirect user to administrators view. (Final Submission)
-4. If there is no such record, provide corrective feedback. (Final Submission)
-```
-
-```
 Administrators view page:
 
 1. Check if sort is selected, and if so, add the corresponding "ORBER BY" part to the main SQL query to sort the catalog. Add sticky values for the sort. (Milestone 3)
@@ -329,12 +320,13 @@ Final submission plan:
 5. Support multiple tags per plant. Currently, each plant can only have one tag.
 6. Add more user credentials to the database.
 7. Implement user access. (DONE)
-8. Implement login/logout control.
+8. Implement login/logout control. (DONE)
 9. Polish design of website.
 10. Clean up and organize code. (DONE)
 11. Fix filled values in Edit form on the Edit page.
 12. Test all pages.
 13. From the login page, redirect the user to the page that they wanted to access initially.
+14. Include partial for header.
 ```
 
 ### Accessibility Audit (Final Submission)

@@ -219,6 +219,9 @@ if (is_user_logged_in()) {
   <h1>Playful Plants Project</h1>
   <?php
   if (is_user_logged_in()) { ?>
+    <a href="<?php echo logout_url(); ?>">
+      <button>Log Out</button>
+    </a>
 
     <div class="tile">
       <img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant Image" width="400">
@@ -325,7 +328,13 @@ if (is_user_logged_in()) {
   } else {
   ?>
 
-    <p>Please <a href="/login">log in</a> to access this page.</p>
+    <p>Yon need to be an administrator to access this page. Please login with your credentials.</p>
+
+    <?php
+    echo_login_form('/admin', $session_messages);
+    ?>
+
+    <p>If you don't have an account and would like to volunteer for this project by being an administrator, please contact us at <a href="mailto:someone@yoursite.com">playfulplantsproject@gmail.com</a>.</p>
 
   <?php
   }

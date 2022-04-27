@@ -190,7 +190,7 @@ if (is_user_logged_in()) {
   <h1>Playful Plants Project</h1>
   <?php
   if (is_user_logged_in()) { ?>
-    <a href="/">
+    <a href="<?php echo logout_url(); ?>">
       <button>Log Out</button>
     </a>
 
@@ -440,7 +440,14 @@ if (is_user_logged_in()) {
   } else {
   ?>
 
-    <p>Please <a href="/login">log in</a> to access this page.</p>
+    <p>Welcome to our page for administrators!</p>
+    <p>Please log in with your credentials.</p>
+
+    <?php
+    echo_login_form('/admin', $session_messages);
+    ?>
+
+    <p>If you don't have an account and would like to volunteer for this project by being an administrator, please contact us at <a href="mailto:someone@yoursite.com">playfulplantsproject@gmail.com</a>.</p>
 
   <?php
   }

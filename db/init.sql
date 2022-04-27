@@ -238,14 +238,25 @@ VALUES
 --- Users Table ---
 
 CREATE TABLE users (
-	user_id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	username TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL UNIQUE
 );
 
 --- Initial user records ---
 
+-- password: monkey
 INSERT INTO
-  users (user_id, username, password)
+  users (id, username, password)
 VALUES
-  (1, 'admin', 'admin');
+  (1, 'admin', '$2y$10$QtCybkpkzh7x5VN11APHned4J8fu78.eFXlyAMmahuAaNcbwZ7FH.');
+
+
+--- Sessions ---
+CREATE TABLE sessions (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+  user_id INTEGER NOT NULL,
+  session TEXT NOT NULL UNIQUE,
+  last_login TEXT NOT NULL,
+  FOREIGN KEY(user_id) REFERENCES users(id)
+);
