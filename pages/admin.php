@@ -508,83 +508,87 @@ if (is_user_logged_in()) {
         <div class="catalog">
           <ul>
             <?php
+            $displayed_plants = array();
             foreach ($records as $record) {
-              $file_name = "./public/photos/" . $record['plant_ID'] . ".jpg";
-              if (!file_exists($file_name)) {
-                // Image Source: (original work) Elena Stoeva
-                $file_name = "/public/photos/image_placeholder.jpg";
-              } ?>
-              <li class="tile">
-                <a href="/details"><img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant" width="200"></a>
-                <div class="tile-header">
-                  <h3><?php echo htmlspecialchars($record['plant_name_coll']); ?></h3>
-                  <h4><?php echo htmlspecialchars($record['plant_name_spec']); ?></h4>
-                  <h5>Plant ID: <?php echo htmlspecialchars($record['plant_ID']); ?></h5>
-                </div>
-                <ul>
-                  <?php if ($record['exploratory_constructive_play']) { ?>
-                    <li>
-                      Supports Exploratory Constructive Play
-                    </li>
-                  <?php } ?>
-                  <?php if ($record['exploratory_sensory_play']) { ?>
-                    <li>
-                      Supports Exploratory Sensory Play
-                    </li>
-                  <?php } ?>
-                  <?php if ($record['physical_play']) { ?>
-                    <li>
-                      Supports Physical Play
-                    </li>
-                  <?php } ?>
-                  <?php if ($record['imaginative_play']) { ?>
-                    <li>
-                      Supports Imaginative Play
-                    </li>
-                  <?php } ?>
-                  <?php if ($record['restorative_play']) { ?>
-                    <li>
-                      Supports Restorative Play
-                    </li>
-                  <?php } ?>
-                  <?php if ($record['expressive_play']) { ?>
-                    <li>
-                      Supports Expressive Play
-                    </li>
-                  <?php } ?>
-                  <?php if ($record['play_with_rules']) { ?>
-                    <li>
-                      Supports Play with Rules
-                    </li>
-                  <?php } ?>
-                  <?php if ($record['bio_play']) { ?>
-                    <li>
-                      Supports Bio Play
-                    </li>
-                  <?php } ?>
-                </ul>
-              </li>
+              if (!in_array($record['plant_ID'], $displayed_plants)) {
+                array_push($displayed_plants, $record['plant_ID']);
+                $file_name = "./public/photos/" . $record['plant_ID'] . ".jpg";
+                if (!file_exists($file_name)) {
+                  // Image Source: (original work) Elena Stoeva
+                  $file_name = "/public/photos/image_placeholder.jpg";
+                } ?>
+                <li class="tile">
+                  <a href="/details"><img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant" width="200"></a>
+                  <div class="tile-header">
+                    <h3><?php echo htmlspecialchars($record['plant_name_coll']); ?></h3>
+                    <h4><?php echo htmlspecialchars($record['plant_name_spec']); ?></h4>
+                    <h5>Plant ID: <?php echo htmlspecialchars($record['plant_ID']); ?></h5>
+                  </div>
+                  <ul>
+                    <?php if ($record['exploratory_constructive_play']) { ?>
+                      <li>
+                        Supports Exploratory Constructive Play
+                      </li>
+                    <?php } ?>
+                    <?php if ($record['exploratory_sensory_play']) { ?>
+                      <li>
+                        Supports Exploratory Sensory Play
+                      </li>
+                    <?php } ?>
+                    <?php if ($record['physical_play']) { ?>
+                      <li>
+                        Supports Physical Play
+                      </li>
+                    <?php } ?>
+                    <?php if ($record['imaginative_play']) { ?>
+                      <li>
+                        Supports Imaginative Play
+                      </li>
+                    <?php } ?>
+                    <?php if ($record['restorative_play']) { ?>
+                      <li>
+                        Supports Restorative Play
+                      </li>
+                    <?php } ?>
+                    <?php if ($record['expressive_play']) { ?>
+                      <li>
+                        Supports Expressive Play
+                      </li>
+                    <?php } ?>
+                    <?php if ($record['play_with_rules']) { ?>
+                      <li>
+                        Supports Play with Rules
+                      </li>
+                    <?php } ?>
+                    <?php if ($record['bio_play']) { ?>
+                      <li>
+                        Supports Bio Play
+                      </li>
+                    <?php } ?>
+                  </ul>
+                </li>
 
-              <form method="get" action="/edit">
+                <form method="get" action="/edit">
 
-                <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['plant_ID']); ?>" />
+                  <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['plant_ID']); ?>" />
 
-                <button type="submit">
-                  Edit
-                </button>
-              </form>
+                  <button type="submit">
+                    Edit
+                  </button>
+                </form>
 
-              <form method="get" action="/admin">
+                <form method="get" action="/admin">
 
-                <input type="hidden" name="delete-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
+                  <input type="hidden" name="delete-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
 
-                <button type="submit">
-                  Delete
-                </button>
-              </form>
+                  <button type="submit">
+                    Delete
+                  </button>
+                </form>
 
-              <hr>
-            <?php } ?>
+                <hr>
+            <?php }
+            } ?>
           </ul>
         </div>
       </div>

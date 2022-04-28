@@ -132,21 +132,25 @@ $records = exec_sql_query($db, $sql_query)->fetchAll();
 
   <div class="catalog-gallery">
     <?php
+    $displayed_plants = array();
     foreach ($records as $record) {
-      $plant_ID = $record['plant_ID'];
-      $file_name = "./public/photos/" . $plant_ID . ".jpg";
-      if (!file_exists($file_name)) {
-        // Image Source: (original work) Elena Stoeva
-        $file_name = "/public/photos/image_placeholder.jpg";
-      }
+      if (!in_array($record['plant_ID'], $displayed_plants)) {
+        array_push($displayed_plants, $record['plant_ID']);
+        $plant_ID = $record['plant_ID'];
+        $file_name = "./public/photos/" . $plant_ID . ".jpg";
+        if (!file_exists($file_name)) {
+          // Image Source: (original work) Elena Stoeva
+          $file_name = "/public/photos/image_placeholder.jpg";
+        }
     ?>
-      <div class="gallery">
-        <a href="/details?<?php echo http_build_query(array('id' => $plant_ID)); ?>"><img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant" width="200" height="200"></a>
-        <div class="tile-header">
-          <div class="name"><?php echo htmlspecialchars($record['plant_name_coll']); ?></div>
+        <div class="gallery">
+          <a href="/details?<?php echo http_build_query(array('id' => $plant_ID)); ?>"><img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant" width="200" height="200"></a>
+          <div class="tile-header">
+            <div class="name"><?php echo htmlspecialchars($record['plant_name_coll']); ?></div>
+          </div>
         </div>
-      </div>
-    <?php } ?>
+    <?php }
+    } ?>
 
   </div>
 
