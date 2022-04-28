@@ -406,7 +406,7 @@ _View all entries:_
 
 _View all entries for a tag:_
 
-1. On the catalog page, the is a dropdow menu called "Filter By Tag".
+1. On the catalog page, the is a dropdown menu called "Filter By Tag".
 
 2. Select a tag from the dropdown menu and the page will be automatically reloaded. You will now be able to view the filtered catalog.
 
@@ -414,7 +414,7 @@ _View a single entry's details:_
 
 1. On the catalog page for consumers, click on any of the images.
 
-2. You will be redirected to a page with details for the specific plant.
+2. You will be redirected to a page with details for the selected plant.
 
 _How to insert and upload a new entry:_
 
@@ -431,6 +431,8 @@ _How to insert and upload a new entry:_
 6. You can also select a JPG file to upload, but this is optional.
 
 7. Submit the form.
+
+8. The page will be reloaded and you should be able to see the new plant at the end of the catalog.
 
 _How to delete an entry:_
 
