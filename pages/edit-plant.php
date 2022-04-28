@@ -41,332 +41,344 @@ if (is_user_logged_in()) {
   $sticky_other_tag = '';
 
   $update_id = $_POST['update-id'] ?? NULL;
-
   $plant_id = $_GET['edit-plant'];
 
+  // --- Update Plant ---
 
   if ($update_id) {
 
-    $records = exec_sql_query(
-      $db,
-      "SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id WHERE (plants.plant_ID = :id);",
-      array(
-        ':id' => $update_id
-      )
-    )->fetchAll();
+    $name_coll = trim($_POST['plant-name-coll']);
+    $name_spec = trim($_POST['plant-name-spec']);
+    $plant_id = trim($_POST['plant-id']);
+    $exploratory_constructive_play = (bool)($_POST['exploratory_constructive_play'] ?? NULL);
+    $exploratory_sensory_play = (bool)($_POST['exploratory_sensory_play'] ?? NULL);
+    $physical_play = (bool)($_POST['physical_play'] ?? NULL);
+    $imaginative_play = (bool)($_POST['imaginative_play'] ?? NULL);
+    $restorative_play = (bool)($_POST['restorative_play'] ?? NULL);
+    $expressive_play = (bool)($_POST['expressive_play'] ?? NULL);
+    $play_with_rules = (bool)($_POST['play_with_rules'] ?? NULL);
+    $bio_play = (bool)($_POST['bio_play'] ?? NULL);
+    $shrub_tag = (bool)($_POST['shrub_tag'] ?? NULL);
+    $grass_tag = (bool)($_POST['grass_tag'] ?? NULL);
+    $vine_tag = (bool)($_POST['vine_tag'] ?? NULL);
+    $tree_tag = (bool)($_POST['tree_tag'] ?? NULL);
+    $flower_tag = (bool)($_POST['flower_tag'] ?? NULL);
+    $groundcover_tag = (bool)($_POST['groundcover_tag'] ?? NULL);
+    $other_tag = (bool)($_POST['other_tag'] ?? NULL);
 
-    if (count($records) > 0) {
-      $record = $records[0];
+    $form_valid = True;
+
+    if (empty($name_coll)) {
+      $form_valid = False;
+      $name_coll_feedback_class = '';
     }
-  } else if ($plant_id) {
 
-    $records = exec_sql_query(
-      $db,
-      "SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id WHERE (plants.plant_ID = :id);",
-      array(
-        ':id' => $plant_id
-      )
-    )->fetchAll();
-
-    if (count($records) > 0) {
-      $record = $records[0];
+    if (empty($name_spec)) {
+      $form_valid = False;
+      $name_spec_feedback_class = '';
     }
-  }
 
-  if ($record) {
-    $name_coll = $record['plant_name_coll'];
-    $name_spec = $record['plant_name_spec'];
-    $plant_id = $record['plant_ID'];
-    $exploratory_constructive_play = (bool)($record['exploratory_constructive_play']);
-    $exploratory_sensory_play = (bool)($record['exploratory_sensory_play']);
-    $physical_play = (bool)($record['physical_play']);
-    $imaginative_play = (bool)($record['imaginative_play']);
-    $restorative_play = (bool)($record['restorative_play']);
-    $expressive_play = (bool)($record['expressive_play']);
-    $play_with_rules = (bool)($record['play_with_rules']);
-    $bio_play = (bool)($record['bio_play']);
+    if (empty($plant_id)) {
+      $form_valid = False;
+      $plant_id_feedback_class = '';
+    }
 
-    $sticky_name_coll = $name_coll;
-    $sticky_name_spec = $name_spec;
-    $sticky_plant_id = $plant_id;
-    $sticky_exploratory_constructive_play = (!$exploratory_constructive_play ? '' : 'checked');
-    $sticky_exploratory_sensory_play = (!$exploratory_sensory_play ? '' : 'checked');
-    $sticky_physical_play = (!$physical_play ? '' : 'checked');
-    $sticky_imaginative_play = (!$imaginative_play ? '' : 'checked');
-    $sticky_restorative_play = (!$restorative_play ? '' : 'checked');
-    $sticky_expressive_play = (!$expressive_play ? '' : 'checked');
-    $sticky_play_with_rules = (!$play_with_rules ? '' : 'checked');
-    $sticky_bio_play = (!$bio_play ? '' : 'checked');
-
-
-    $file_name = "./public/photos/" . $record['plant_ID'] . ".jpg";
-    if (!file_exists($file_name)) {
-      // Image Source: (original work) Elena Stoeva
-      $file_name = "/public/photos/image_placeholder.jpg";
+    // The plant should support at least one type of play
+    if (
+      !$exploratory_constructive_play && !$exploratory_sensory_play
+      && !$physical_play && !$imaginative_play && !$restorative_play
+      && !$expressive_play && !$play_with_rules && !$bio_play
+    ) {
+      $form_valid = False;
+      $play_type_feedback_class = '';
     }
 
 
-    // --- Update Plant ---
+    // --- Handle Uploads ---
 
-    if ($update_id) {
+    $upload = $_FILES['jpg-file'];
 
-      $name_coll = trim($_POST['plant-name-coll']);
-      $name_spec = trim($_POST['plant-name-spec']);
-      $plant_id = trim($_POST['plant-id']);
-      $exploratory_constructive_play = (bool)($_POST['exploratory_constructive_play'] ?? NULL);
-      $exploratory_sensory_play = (bool)($_POST['exploratory_sensory_play'] ?? NULL);
-      $physical_play = (bool)($_POST['physical_play'] ?? NULL);
-      $imaginative_play = (bool)($_POST['imaginative_play'] ?? NULL);
-      $restorative_play = (bool)($_POST['restorative_play'] ?? NULL);
-      $expressive_play = (bool)($_POST['expressive_play'] ?? NULL);
-      $play_with_rules = (bool)($_POST['play_with_rules'] ?? NULL);
-      $bio_play = (bool)($_POST['bio_play'] ?? NULL);
-      $shrub_tag = (bool)($_POST['shrub_tag'] ?? NULL);
-      $grass_tag = (bool)($_POST['grass_tag'] ?? NULL);
-      $vine_tag = (bool)($_POST['vine_tag'] ?? NULL);
-      $tree_tag = (bool)($_POST['tree_tag'] ?? NULL);
-      $flower_tag = (bool)($_POST['flower_tag'] ?? NULL);
-      $groundcover_tag = (bool)($_POST['groundcover_tag'] ?? NULL);
-      $other_tag = (bool)($_POST['other_tag'] ?? NULL);
+    if ($upload['error'] == UPLOAD_ERR_OK) {
+      $upload_filename = basename($upload['name']);
+      $upload_ext = strtolower(pathinfo($upload_filename, PATHINFO_EXTENSION));
 
-      $form_valid = True;
-
-      if (empty($name_coll)) {
+      // This site only accepts JPG files
+      if (!in_array($upload_ext, array("jpg"))) {
         $form_valid = False;
-        $name_coll_feedback_class = '';
       }
-
-      if (empty($name_spec)) {
+    } else {
+      // Something is uploaded but is wrong format/size
+      if ($upload['name'] != "") {
         $form_valid = False;
-        $name_spec_feedback_class = '';
       }
+    }
 
-      if (empty($plant_id)) {
-        $form_valid = False;
-        $plant_id_feedback_class = '';
-      }
+    if ($form_valid) {
+      $result = exec_sql_query(
+        $db,
+        "UPDATE plants
+    SET plant_name_coll = :plant_name_coll, plant_name_spec = :plant_name_spec, plant_ID = :plant_ID, exploratory_constructive_play = :exploratory_constructive_play, exploratory_sensory_play = :exploratory_sensory_play, physical_play = :physical_play,
+    imaginative_play = :imaginative_play, restorative_play = :restorative_play, expressive_play = :expressive_play, play_with_rules = :play_with_rules, bio_play = :bio_play
+    WHERE plants.id = :id;",
+        array(
+          ':plant_name_coll' => $name_coll,
+          ':plant_name_spec' => $name_spec,
+          ':plant_ID' => $plant_id,
+          ':exploratory_constructive_play' => ($exploratory_constructive_play ? 1 : 0),
+          ':exploratory_sensory_play' => ($exploratory_sensory_play ? 1 : 0),
+          ':physical_play' => ($physical_play ? 1 : 0),
+          ':imaginative_play' => ($imaginative_play ? 1 : 0),
+          ':restorative_play' => ($restorative_play ? 1 : 0),
+          ':expressive_play' => ($expressive_play ? 1 : 0),
+          ':play_with_rules' => ($play_with_rules ? 1 : 0),
+          ':bio_play' => ($bio_play ? 1 : 0),
+          ':id' => $update_id
+        )
+      );
 
-      // The plant should support at least one type of play
-      if (
-        !$exploratory_constructive_play && !$exploratory_sensory_play
-        && !$physical_play && !$imaginative_play && !$restorative_play
-        && !$expressive_play && !$play_with_rules && !$bio_play
-      ) {
-        $form_valid = False;
-        $play_type_feedback_class = '';
-      }
+      // $record_id = $db->lastInsertId('id');
+      $record_id = $update_id;
 
-
-      // --- Handle Uploads ---
-
-      $upload = $_FILES['jpg-file'];
-
-      if ($upload['error'] == UPLOAD_ERR_OK) {
-        $upload_filename = basename($upload['name']);
-        $upload_ext = strtolower(pathinfo($upload_filename, PATHINFO_EXTENSION));
-
-        // This site only accepts JPG files
-        if (!in_array($upload_ext, array("jpg"))) {
-          $form_valid = False;
-        }
-      } else {
-        // Something is uploaded but is wrong format/size
-        if ($upload['name'] != "") {
-          $form_valid = False;
-        }
-      }
-
-      if ($form_valid) {
-        $result = exec_sql_query(
+      if ($shrub_tag) {
+        exec_sql_query(
           $db,
-          "UPDATE plants
-        SET plant_name_coll = :plant_name_coll, plant_name_spec = :plant_name_spec, plant_ID = :plant_ID, exploratory_constructive_play = :exploratory_constructive_play, exploratory_sensory_play = :exploratory_sensory_play, physical_play = :physical_play,
-        imaginative_play = :imaginative_play, restorative_play = :restorative_play, expressive_play = :expressive_play, play_with_rules = :play_with_rules, bio_play = :bio_play
-        WHERE plant_ID = :id;",
+          "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
           array(
-            ':plant_name_coll' => $name_coll,
-            ':plant_name_spec' => $name_spec,
-            ':plant_ID' => $plant_id,
-            ':exploratory_constructive_play' => ($exploratory_constructive_play ? 1 : 0),
-            ':exploratory_sensory_play' => ($exploratory_sensory_play ? 1 : 0),
-            ':physical_play' => ($physical_play ? 1 : 0),
-            ':imaginative_play' => ($imaginative_play ? 1 : 0),
-            ':restorative_play' => ($restorative_play ? 1 : 0),
-            ':expressive_play' => ($expressive_play ? 1 : 0),
-            ':play_with_rules' => ($play_with_rules ? 1 : 0),
-            ':bio_play' => ($bio_play ? 1 : 0),
-            ':id' => $update_id
+            ':plant_id' => $record_id,
+            ':tag_id' => 1
           )
         );
-
-        $record_id = $db->lastInsertId('id');
-
-        if ($shrub_tag) {
-          exec_sql_query(
-            $db,
-            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 1
-            )
-          );
-        } else {
-          exec_sql_query(
-            $db,
-            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 1
-            )
-          );
-        }
-
-        if ($grass_tag) {
-          exec_sql_query(
-            $db,
-            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 2
-            )
-          );
-        } else {
-          exec_sql_query(
-            $db,
-            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 2
-            )
-          );
-        }
-
-        if ($vine_tag) {
-          exec_sql_query(
-            $db,
-            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 3
-            )
-          );
-        } else {
-          exec_sql_query(
-            $db,
-            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 3
-            )
-          );
-        }
-
-        if ($tree_tag) {
-          exec_sql_query(
-            $db,
-            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 4
-            )
-          );
-        } else {
-          exec_sql_query(
-            $db,
-            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 4
-            )
-          );
-        }
-
-        if ($flower_tag) {
-          exec_sql_query(
-            $db,
-            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 5
-            )
-          );
-        } else {
-          exec_sql_query(
-            $db,
-            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 5
-            )
-          );
-        }
-
-        if ($groundcover_tag) {
-          exec_sql_query(
-            $db,
-            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 6
-            )
-          );
-        } else {
-          exec_sql_query(
-            $db,
-            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 6
-            )
-          );
-        }
-
-        if ($other_tag) {
-          exec_sql_query(
-            $db,
-            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 7
-            )
-          );
-        } else {
-          exec_sql_query(
-            $db,
-            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
-            array(
-              ':plant_id' => $record_id,
-              ':tag_id' => 7
-            )
-          );
-        }
-
-        if ($result && $upload['name'] != "") {
-          $id_filename = 'public/photos/' . $plant_id . '.' . $upload_ext;
-          move_uploaded_file($upload["tmp_name"], $id_filename);
-        }
       } else {
-        $sticky_name_coll = $name_coll;
-        $sticky_name_spec = $name_spec;
-        $sticky_plant_id = $plant_id;
-        $sticky_exploratory_constructive_play = (!$exploratory_constructive_play ? '' : 'checked');
-        $sticky_exploratory_sensory_play = (!$exploratory_sensory_play ? '' : 'checked');
-        $sticky_physical_play = (!$physical_play ? '' : 'checked');
-        $sticky_imaginative_play = (!$imaginative_play ? '' : 'checked');
-        $sticky_restorative_play = (!$restorative_play ? '' : 'checked');
-        $sticky_expressive_play = (!$expressive_play ? '' : 'checked');
-        $sticky_play_with_rules = (!$play_with_rules ? '' : 'checked');
-        $sticky_bio_play = (!$bio_play ? '' : 'checked');
-        $sticky_shrub_tag = (!$shrub_tag ? '' : 'checked');
-        $sticky_grass_tag = (!$grass_tag ? '' : 'checked');
-        $sticky_vine_tag = (!$vine_tag ? '' : 'checked');
-        $sticky_tree_tag = (!$tree_tag ? '' : 'checked');
-        $sticky_flower_tag = (!$flower_tag ? '' : 'checked');
-        $sticky_groundcover_tag = (!$groundcover_tag ? '' : 'checked');
-        $sticky_other_tag = (!$other_tag ? '' : 'checked');
+        exec_sql_query(
+          $db,
+          "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 1
+          )
+        );
       }
+
+      if ($grass_tag) {
+        exec_sql_query(
+          $db,
+          "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 2
+          )
+        );
+      } else {
+        exec_sql_query(
+          $db,
+          "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 2
+          )
+        );
+      }
+
+      if ($vine_tag) {
+        exec_sql_query(
+          $db,
+          "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 3
+          )
+        );
+      } else {
+        exec_sql_query(
+          $db,
+          "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 3
+          )
+        );
+      }
+
+      if ($tree_tag) {
+        exec_sql_query(
+          $db,
+          "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 4
+          )
+        );
+      } else {
+        exec_sql_query(
+          $db,
+          "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 4
+          )
+        );
+      }
+
+      if ($flower_tag) {
+        exec_sql_query(
+          $db,
+          "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 5
+          )
+        );
+      } else {
+        exec_sql_query(
+          $db,
+          "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 5
+          )
+        );
+      }
+
+      if ($groundcover_tag) {
+        exec_sql_query(
+          $db,
+          "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 6
+          )
+        );
+      } else {
+        exec_sql_query(
+          $db,
+          "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 6
+          )
+        );
+      }
+
+      if ($other_tag) {
+        exec_sql_query(
+          $db,
+          "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 7
+          )
+        );
+      } else {
+        exec_sql_query(
+          $db,
+          "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+          array(
+            ':plant_id' => $record_id,
+            ':tag_id' => 7
+          )
+        );
+      }
+
+      if ($result && $upload['name'] != "") {
+        $id_filename = 'public/photos/' . $plant_id . '.' . $upload_ext;
+        move_uploaded_file($upload["tmp_name"], $id_filename);
+      }
+    } else {
+      $sticky_name_coll = $name_coll;
+      $sticky_name_spec = $name_spec;
+      $sticky_plant_id = $plant_id;
+      $sticky_exploratory_constructive_play = (!$exploratory_constructive_play ? '' : 'checked');
+      $sticky_exploratory_sensory_play = (!$exploratory_sensory_play ? '' : 'checked');
+      $sticky_physical_play = (!$physical_play ? '' : 'checked');
+      $sticky_imaginative_play = (!$imaginative_play ? '' : 'checked');
+      $sticky_restorative_play = (!$restorative_play ? '' : 'checked');
+      $sticky_expressive_play = (!$expressive_play ? '' : 'checked');
+      $sticky_play_with_rules = (!$play_with_rules ? '' : 'checked');
+      $sticky_bio_play = (!$bio_play ? '' : 'checked');
+      $sticky_shrub_tag = (!$shrub_tag ? '' : 'checked');
+      $sticky_grass_tag = (!$grass_tag ? '' : 'checked');
+      $sticky_vine_tag = (!$vine_tag ? '' : 'checked');
+      $sticky_tree_tag = (!$tree_tag ? '' : 'checked');
+      $sticky_flower_tag = (!$flower_tag ? '' : 'checked');
+      $sticky_groundcover_tag = (!$groundcover_tag ? '' : 'checked');
+      $sticky_other_tag = (!$other_tag ? '' : 'checked');
     }
   }
+}
+
+
+if ($update_id) {
+
+  $records = exec_sql_query(
+    $db,
+    "SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id WHERE (plants.id = :id);",
+    array(
+      ':id' => $update_id
+    )
+  )->fetchAll();
+
+  if (count($records) > 0) {
+    $record = $records[0];
+  }
+} else if ($plant_id) {
+
+  $records = exec_sql_query(
+    $db,
+    "SELECT * FROM plants LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id WHERE (plants.id = :id);",
+    array(
+      ':id' => $plant_id
+    )
+  )->fetchAll();
+
+  if (count($records) > 0) {
+    $record = $records[0];
+  }
+}
+
+if ($record) {
+  $name_coll = $record['plant_name_coll'];
+  $name_spec = $record['plant_name_spec'];
+  $plant_id = $record['plant_ID'];
+  $exploratory_constructive_play = (bool)($record['exploratory_constructive_play']);
+  $exploratory_sensory_play = (bool)($record['exploratory_sensory_play']);
+  $physical_play = (bool)($record['physical_play']);
+  $imaginative_play = (bool)($record['imaginative_play']);
+  $restorative_play = (bool)($record['restorative_play']);
+  $expressive_play = (bool)($record['expressive_play']);
+  $play_with_rules = (bool)($record['play_with_rules']);
+  $bio_play = (bool)($record['bio_play']);
+
+  $sticky_name_coll = $name_coll;
+  $sticky_name_spec = $name_spec;
+  $sticky_plant_id = $plant_id;
+  $sticky_exploratory_constructive_play = (!$exploratory_constructive_play ? '' : 'checked');
+  $sticky_exploratory_sensory_play = (!$exploratory_sensory_play ? '' : 'checked');
+  $sticky_physical_play = (!$physical_play ? '' : 'checked');
+  $sticky_imaginative_play = (!$imaginative_play ? '' : 'checked');
+  $sticky_restorative_play = (!$restorative_play ? '' : 'checked');
+  $sticky_expressive_play = (!$expressive_play ? '' : 'checked');
+  $sticky_play_with_rules = (!$play_with_rules ? '' : 'checked');
+  $sticky_bio_play = (!$bio_play ? '' : 'checked');
+
+
+  $file_name = "./public/photos/" . $record['plant_ID'] . ".jpg";
+  if (!file_exists($file_name)) {
+    // Image Source: (original work) Elena Stoeva
+    $file_name = "/public/photos/image_placeholder.jpg";
+  }
+
+  $tags = array();
+  foreach ($records as $record) {
+    array_push($tags, $record['tag_name']);
+  }
+
+  $sticky_shrub_tag = (!in_array('Shrub', $tags) ? '' : 'checked');
+  $sticky_grass_tag = (!in_array('Grass', $tags) ? '' : 'checked');
+  $sticky_vine_tag = (!in_array('Vine', $tags) ? '' : 'checked');
+  $sticky_tree_tag = (!in_array('Tree', $tags) ? '' : 'checked');
+  $sticky_flower_tag = (!in_array('Flower', $tags) ? '' : 'checked');
+  $sticky_groundcover_tag = (!in_array('Groundcover', $tags) ? '' : 'checked');
+  $sticky_other_tag = (!in_array('Other', $tags) ? '' : 'checked');
 }
 ?>
 
@@ -496,8 +508,6 @@ if (is_user_logged_in()) {
           </div>
         </div>
 
-        <input type="hidden" name="update-id" value="<?php echo htmlspecialchars($plant_id); ?>" />
-
         <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
 
         <p class="feedback <?php echo $file_feedback_class; ?>">Please select a JPG file.</p>
@@ -505,6 +515,8 @@ if (is_user_logged_in()) {
           <label for="upload-file">Upload JPG Image:</label>
           <input id="upload-file" type="file" name="jpg-file" accept=".jpg" />
         </div>
+
+        <input type="hidden" name="update-id" value="<?php echo $record['id']; ?>" />
 
         <div>
           <button type="submit">Save Changes</button>

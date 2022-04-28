@@ -518,7 +518,7 @@ if (is_user_logged_in()) {
                   $file_name = "/public/photos/image_placeholder.jpg";
                 } ?>
                 <li class="tile">
-                  <a href="/details"><img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant" width="200"></a>
+                  <img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant" width="200">
                   <div class="tile-header">
                     <h3><?php echo htmlspecialchars($record['plant_name_coll']); ?></h3>
                     <h4><?php echo htmlspecialchars($record['plant_name_spec']); ?></h4>
@@ -570,7 +570,7 @@ if (is_user_logged_in()) {
 
                 <form method="get" action="/edit">
 
-                  <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['plant_ID']); ?>" />
+                  <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
 
                   <button type="submit">
                     Edit
