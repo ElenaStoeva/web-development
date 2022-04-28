@@ -32,6 +32,13 @@ if (is_user_logged_in()) {
   $sticky_expressive_play = '';
   $sticky_play_with_rules = '';
   $sticky_bio_play = '';
+  $sticky_shrub_tag = '';
+  $sticky_grass_tag = '';
+  $sticky_vine_tag = '';
+  $sticky_tree_tag = '';
+  $sticky_flower_tag = '';
+  $sticky_groundcover_tag = '';
+  $sticky_other_tag = '';
 
   $update_id = $_POST['update-id'] ?? NULL;
 
@@ -114,6 +121,13 @@ if (is_user_logged_in()) {
       $expressive_play = (bool)($_POST['expressive_play'] ?? NULL);
       $play_with_rules = (bool)($_POST['play_with_rules'] ?? NULL);
       $bio_play = (bool)($_POST['bio_play'] ?? NULL);
+      $shrub_tag = (bool)($_POST['shrub_tag'] ?? NULL);
+      $grass_tag = (bool)($_POST['grass_tag'] ?? NULL);
+      $vine_tag = (bool)($_POST['vine_tag'] ?? NULL);
+      $tree_tag = (bool)($_POST['tree_tag'] ?? NULL);
+      $flower_tag = (bool)($_POST['flower_tag'] ?? NULL);
+      $groundcover_tag = (bool)($_POST['groundcover_tag'] ?? NULL);
+      $other_tag = (bool)($_POST['other_tag'] ?? NULL);
 
       $form_valid = True;
 
@@ -156,7 +170,10 @@ if (is_user_logged_in()) {
           $form_valid = False;
         }
       } else {
-        $form_valid = False;
+        // Something is uploaded but is wrong format/size
+        if ($upload['name'] != "") {
+          $form_valid = False;
+        }
       }
 
       if ($form_valid) {
@@ -182,7 +199,149 @@ if (is_user_logged_in()) {
           )
         );
 
-        if ($result) {
+        $record_id = $db->lastInsertId('id');
+
+        if ($shrub_tag) {
+          exec_sql_query(
+            $db,
+            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 1
+            )
+          );
+        } else {
+          exec_sql_query(
+            $db,
+            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 1
+            )
+          );
+        }
+
+        if ($grass_tag) {
+          exec_sql_query(
+            $db,
+            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 2
+            )
+          );
+        } else {
+          exec_sql_query(
+            $db,
+            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 2
+            )
+          );
+        }
+
+        if ($vine_tag) {
+          exec_sql_query(
+            $db,
+            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 3
+            )
+          );
+        } else {
+          exec_sql_query(
+            $db,
+            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 3
+            )
+          );
+        }
+
+        if ($tree_tag) {
+          exec_sql_query(
+            $db,
+            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 4
+            )
+          );
+        } else {
+          exec_sql_query(
+            $db,
+            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 4
+            )
+          );
+        }
+
+        if ($flower_tag) {
+          exec_sql_query(
+            $db,
+            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 5
+            )
+          );
+        } else {
+          exec_sql_query(
+            $db,
+            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 5
+            )
+          );
+        }
+
+        if ($groundcover_tag) {
+          exec_sql_query(
+            $db,
+            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 6
+            )
+          );
+        } else {
+          exec_sql_query(
+            $db,
+            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 6
+            )
+          );
+        }
+
+        if ($other_tag) {
+          exec_sql_query(
+            $db,
+            "INSERT INTO plant_tags (plant_id, tag_id) VALUES (:plant_id, :tag_id);",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 7
+            )
+          );
+        } else {
+          exec_sql_query(
+            $db,
+            "DELETE FROM plant_tags WHERE plant_id = :plant_id AND tag_id = :tag_id;",
+            array(
+              ':plant_id' => $record_id,
+              ':tag_id' => 7
+            )
+          );
+        }
+
+        if ($result && $upload['name'] != "") {
           $id_filename = 'public/photos/' . $plant_id . '.' . $upload_ext;
           move_uploaded_file($upload["tmp_name"], $id_filename);
         }
@@ -198,6 +357,13 @@ if (is_user_logged_in()) {
         $sticky_expressive_play = (!$expressive_play ? '' : 'checked');
         $sticky_play_with_rules = (!$play_with_rules ? '' : 'checked');
         $sticky_bio_play = (!$bio_play ? '' : 'checked');
+        $sticky_shrub_tag = (!$shrub_tag ? '' : 'checked');
+        $sticky_grass_tag = (!$grass_tag ? '' : 'checked');
+        $sticky_vine_tag = (!$vine_tag ? '' : 'checked');
+        $sticky_tree_tag = (!$tree_tag ? '' : 'checked');
+        $sticky_flower_tag = (!$flower_tag ? '' : 'checked');
+        $sticky_groundcover_tag = (!$groundcover_tag ? '' : 'checked');
+        $sticky_other_tag = (!$other_tag ? '' : 'checked');
       }
     }
   }
@@ -292,19 +458,42 @@ if (is_user_logged_in()) {
           </div>
         </div>
 
-        <div>
-          Tag:
-          <select name="tag">
-            <option value="tag" selected><?php echo htmlspecialchars($record['tag_name']) ?></option>
-            <?php
-            $tags = ['Shrub', 'Grass', 'Vine', 'Tree', 'Flower', 'Groundcover', 'Other'];
-            foreach ($tags as $tag) {
-              if ($tag != $record['tag_name']) { ?>
-                <option value="tag"><?php echo htmlspecialchars($tag) ?></option>
-            <?php
-              }
-            } ?>
-          </select>
+        <div>Tags:</div>
+        <div role="group">
+          <div>
+            <input type="checkbox" id="shrub_tag" name="shrub_tag" <?php echo $sticky_shrub_tag; ?> />
+            <label for="shrub_tag">Shrub</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="grass_tag" name="grass_tag" <?php echo $sticky_grass_tag; ?> />
+            <label for="grass_tag">Grass</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="vine_tag" name="vine_tag" <?php echo $sticky_vine_tag; ?> />
+            <label for="vine_tag">Vine</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="tree_tag" name="tree_tag" <?php echo $sticky_tree_tag; ?> />
+            <label for="tree_tag">Tree</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="flower_tag" name="flower_tag" <?php echo $sticky_flower_tag; ?> />
+            <label for="flower_tag">Flower</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="groundcover_tag" name="groundcover_tag" <?php echo $sticky_groundcover_tag; ?> />
+            <label for="groundcover_tag">Groundcover</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="other_tag" name="other_tag" <?php echo $sticky_other_tag; ?> />
+            <label for="other_tag">Other</label>
+          </div>
         </div>
 
         <input type="hidden" name="update-id" value="<?php echo htmlspecialchars($plant_id); ?>" />

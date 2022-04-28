@@ -1,9 +1,21 @@
 <?php
 $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 $plant_ID = $_GET['id'];
-$sql_query = "SELECT * FROM plants WHERE plant_ID ='" . $plant_ID . "'";
+$sql_query = "SELECT * FROM plants LEFT OUTER JOIN plant_tags on plants.id = plant_tags.plant_id LEFT OUTER JOIN tags on tags.tag_id = plant_tags.tag_id WHERE plants.plant_ID ='" . $plant_ID . "'";
 $records = exec_sql_query($db, $sql_query)->fetchAll();
 $record = $records[0];
+
+// Get all tags of this plant
+$tags = array();
+foreach ($records as $record) {
+  array_push($tags, $record['tag_name']);
+}
+
+$tag_names = "None";
+if (count($tags) > 0) {
+  $tag_names = implode(", ", $tags);
+}
+
 $file_name = "./public/photos/" . $plant_ID . ".jpg";
 if (!file_exists($file_name)) {
   // Image Source: (original work) Elena Stoeva
@@ -30,7 +42,6 @@ if (!file_exists($file_name)) {
     <div class="tile-header">
       <h3><?php echo htmlspecialchars($record['plant_name_coll']); ?></h3>
       <h4><?php echo htmlspecialchars($record['plant_name_spec']); ?></h4>
-      <h5>Plant ID: <?php echo htmlspecialchars($plant_ID); ?></h5>
     </div>
     <ul>
       <?php if ($record['exploratory_constructive_play']) { ?>
@@ -75,6 +86,9 @@ if (!file_exists($file_name)) {
       <?php } ?>
 
     </ul>
+    <div>
+      Tags: <?php echo $tag_names ?>
+    </div>
   </div>
 
   <a href="/">Go back to catalog</a>

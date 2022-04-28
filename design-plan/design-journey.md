@@ -317,8 +317,8 @@ Final submission plan:
 2. Add image uploads to edit page and Add plant form. (DONE)
 3. Make filters work - currently they don't do anything. (DONE)
 4. Improve design of filter buttons as per feedback from Milestone 3. (DONE)
-5. Support multiple tags per plant. Currently, each plant can only have one tag.
-6. Add more user credentials to the database.
+5. Support multiple tags per plant. Currently, each plant can only have one tag. (DONE)
+6. Make filtering and sorting sticky.
 7. Implement user access. (DONE)
 8. Implement login/logout control. (DONE)
 9. Polish design of website.
