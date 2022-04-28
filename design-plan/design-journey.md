@@ -362,7 +362,7 @@ Final submission plan:
 > Tell us what issues you discovered during your accessibility audit.
 > What do you do to improve the accessibility of your site?
 
-TODO
+I didn't find any issues during my accessibility audit. To provide good accessibility to the website, I was trying to maintain a sufficient contrast between the text color and the background color. I also identified the language that is used on the website and I used multiple form labels to facilitate screen reading.
 
 
 ## Reflection (Final Submission)
@@ -371,26 +371,24 @@ TODO
 
 > Tell us how your final site meets the goals of your audiences. Be specific here. Tell us how you tailored your design, content, etc. to make your website usable for your personas.
 
-TODO
+The consumers are able to view all plants in the data set through the catalog, sort them by name, and filter them by tags through the dropdown select buttons. They can also view details about each plant on a separate page that is specific for this plant. The administrators are able to log in, view all plants through the catalog, filter and sort the catalog, use the "Add Plant" form to add a new plant, delete a plant throught the "Delete" button, and edit each plant on a separate page that contains an Edit form. All these functionalities allow the consumers and the administrators to achieve their goals when using the website.
 
 
 ### Additional Design Justifications (Final Submission)
 
 > If you feel like you haven’t fully explained your design choices in the final submission, or you want to explain some functions in your site (e.g., if you feel like you make a special design choice which might not meet the final requirement), you can use the additional design justifications to justify your design choices. Remember, this is place for you to justify your design choices which you haven’t covered in the design journey. You don’t need to fill out this section if you think all design choices have been well explained in the design journey.
 
-TODO
-
 
 ### Self-Reflection (Final Submission)
 
 > Reflect on what you learned during this assignment. How have you improved from Project 2? What would you do differently next time?
 
-TODO
+I learned a lot about database initialization, image uploads, and user access controls, and I think that all of these are very useful to know. I think I greatly improved my knowledge since Project 2. What I would do differently is starting working on the projects earlier.
 
 
 > Take some time here to reflect on how much you've learned since you started this class. It's often easy to ignore our own progress. Take a moment and think about your accomplishments in this class. Hopefully you'll recognize that you've accomplished a lot and that you should be very proud of those accomplishments!
 
-TODO
+I'm really happy with the new skills that I gained in this class and I can't wait to apply them on my next personal projects. I definetelly feel more confident now when I discuss topics on web development. Overall, I think I learned a lot in this class and I'm happy that I decided to enroll in it.
 
 
 ### Grading: Step-by-Step Instructions (Final Submission)
@@ -402,36 +400,50 @@ TODO
 
 _View all entries:_
 
-1. TODO
+1. Run the debugger (start the server).
 
-2.
+2. You will automatically be redirected to the catalog page for consumers where you will be able to view all entries.
 
 _View all entries for a tag:_
 
-1. TODO
+1. On the catalog page, the is a dropdow menu called "Filter By Tag".
 
-2.
+2. Select a tag from the dropdown menu and the page will be automatically reloaded. You will now be able to view the filtered catalog.
 
 _View a single entry's details:_
 
-1. TODO
+1. On the catalog page for consumers, click on any of the images.
 
-2.
+2. You will be redirected to a page with details for the specific plant.
 
 _How to insert and upload a new entry:_
 
-1. TODO
+1. If you are on the Details page, click on the "Go back to the catalog" link at the bottom and you will be redirected to the catalog page for consumers.
 
-2.
+2. Click on the "Log In" button at the top.
+
+3. Log in with username "admin" and password "monkey".
+
+4. Now you should be redirected to the catalog page for administrators. Navigate the "Add Plant" form.
+
+5. Fill out the form.
+
+6. You can also select a JPG file to upload, but this is optional.
+
+7. Submit the form.
 
 _How to delete an entry:_
 
-1. TODO
+1. On the catalog page for administrators, click on the "Delete" button for any of the plants.
 
-2.
+2. The page will be reloaded and the catalog will not include this plant anymore.
 
 _How to edit and existing entry and its tags:_
 
-1. TODO
+1. On the catalog page for administrators, click on the "Edit" button for any of the plants.
 
-2.
+2. You will be redirected to the Edit page for the selected plant.
+
+3. Update the fields in the form that you would like to change.
+
+4. Submit the form. The page will be reloaded and you will now see the updated fields.
