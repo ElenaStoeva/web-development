@@ -569,7 +569,7 @@ if (is_user_logged_in()) {
 
                 <form class="space" method="get" action="/edit">
 
-                  <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['plant_ID']); ?>" />
+                  <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
 
                   <button type="submit">
                     Edit
@@ -578,7 +578,7 @@ if (is_user_logged_in()) {
 
                 <form method="get" action="/admin">
 
-                  <input type="hidden" name="delete-plant" value="<?php echo htmlspecialchars($record['plant_ID']); ?>" />
+                  <input type="hidden" name="delete-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
 
                   <button type="submit">
                     Delete
