@@ -151,6 +151,36 @@ This is the new design for the consumers' view of the web site. Now it is made f
 
 This is the new administrators view of the site. Now it contains an Edit button for each entry, as required for this project. When Tim clicks on the Edit button for some plant, he is redirected to a new page that contains a form with the properties of this plant. Tim will be able to change the values of the inputs in the form, and when he submits the form, these new values will be applied to the database.
 
+
+_Final Submission:_
+
+Below is the design of my polished website:
+
+![Consumers View - Final](final_consumer.jpg)
+Consumer View
+
+<br>
+
+
+![Details - Final](final_details.jpg)
+Page with plant details for consumers
+
+<br>
+
+![Login Form- Final](final_login.jpg)
+Login Page
+
+<br>
+
+![Administrator View - Final](final_admin.jpg)
+Catalog for administrators
+
+<br>
+
+![Edit Page - Final](final_edit.jpg)
+Edit page for administrators
+
+
 ### Design Pattern Explanation/Reflection (Milestone 1)
 
 > Write a one paragraph (6-8 sentences) reflection explaining how you used design patterns for media catalogs in your site's final design.
@@ -318,15 +348,13 @@ Final submission plan:
 3. Make filters work - currently they don't do anything. (DONE)
 4. Improve design of filter buttons as per feedback from Milestone 3. (DONE)
 5. Support multiple tags per plant. Currently, each plant can only have one tag. (DONE)
-6. Make filtering and sorting sticky.
+6. Make filtering and sorting sticky. (DONE)
 7. Implement user access. (DONE)
 8. Implement login/logout control. (DONE)
-9. Polish design of website.
+9. Polish design of website. (DONE)
 10. Clean up and organize code. (DONE)
-11. Fix filled values in Edit form on the Edit page.
+11. Fix filled values in Edit form on the Edit page. (DONE)
 12. Test all pages.
-13. From the login page, redirect the user to the page that they wanted to access initially.
-14. Include partial for header.
 ```
 
 ### Accessibility Audit (Final Submission)
