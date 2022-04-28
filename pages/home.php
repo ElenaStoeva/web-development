@@ -4,15 +4,24 @@
 
 $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 $uri = $_SERVER['REQUEST_URI'];
+$params = $_GET;
 
 // --- Handle Sorting ---
+
+$sticky_sort_asc = '';
+$sticky_sort_desc = '';
+$sticky_sort_default = '';
 
 $sql_order_part = '';
 $order = $_GET['order'] ?? NULL;
 if ($order == 'asc') {
   $sql_order_part = ' ORDER BY plant_name_coll ASC';
+  $sticky_sort_asc = 'selected';
 } else if ($order == 'desc') {
   $sql_order_part = ' ORDER BY plant_name_coll DESC';
+  $sticky_sort_desc = 'selected';
+} else {
+  $sticky_sort_default = 'selected';
 }
 
 // --- Handle Filtering ---
@@ -22,6 +31,15 @@ $filter = $_GET['filter'] ?? NULL;
 if ($filter) {
   $sql_where_part = ' WHERE tags.tag_name = "' . $filter . '"';
 }
+
+$sticky_filter_default = ($filter ? '' : 'selected');
+$sticky_filter_shrub = (($filter != "Shrub") ? '' : 'selected');
+$sticky_filter_grass = (($filter != "Grass") ? '' : 'selected');
+$sticky_filter_vine = (($filter != "Vine") ? '' : 'selected');
+$sticky_filter_tree = (($filter != "Tree") ? '' : 'selected');
+$sticky_filter_flower = (($filter != "Flower") ? '' : 'selected');
+$sticky_filter_groundcover = (($filter != "Groundcover") ? '' : 'selected');
+$sticky_filter_other = (($filter != "Other") ? '' : 'selected');
 
 // --- Get Records From Database ---
 
@@ -55,52 +73,61 @@ $records = exec_sql_query($db, $sql_query)->fetchAll();
     <div class="sort-filter">
       Sort:
       <select name="sort" onchange="location = this.value;">
-        <option value="/"></option>
-        <option value="/?order=asc">Name Ascending</option>
-        <option value="/?order=desc">Name Descending</option>
+        <?php $new_params = $params;
+        $new_params['order'] = 'asc';
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_default ?>></option>
+
+        <?php
+        $new_params = $params;
+        $new_params['order'] = 'asc';
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_asc; ?>>Name Ascending</option>
+
+        <?php
+        $new_params = $params;
+        $new_params['order'] = 'desc';
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_desc; ?>>Name Descending</option>
       </select>
     </div>
-    <div class="filter-dropdown sort-filter">
-      <button onclick="clickFilter()" class="dropbtn">Filter <i class="arrow"></i></button>
-      <div id="filterDropdown" class="filter-dropdown-content">
-        <ul>
-          <li>
-            <input onclick="location = '/?filter=Shrub';" type="checkbox" id="shrub_tag" name="shrub_tag" />
-            <label for="shrub_tag">Shrub</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Grass';" type="checkbox" id="grass_tag" name="grass_tag" />
-            <label for="grass_tag">Grass</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Vine';" type="checkbox" id="vine_tag" name="vine_tag" />
-            <label for="vine_tag">Vine</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Ttree';" type="checkbox" id="tree_tag" name="tree_tag" />
-            <label for="tree_tag">Tree</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Flower';" type="checkbox" id="flower_tag" name="flower_tag" />
-            <label for="flower_tag">Flower</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Groundcover';" type="checkbox" id="groundcover_tag" name="groundcover_tag" />
-            <label for="groundcover_tag">Groundcover</label>
-          </li>
-          <li>
-            <input onclick="location = '/?filter=Other';" type="checkbox" id="other_tag" name="other_tag" />
-            <label for="other_tag">Other</label>
-          </li>
-        </ul>
-      </div>
-    </div>
 
-    <script>
-      function clickFilter() {
-        document.getElementById("filterDropdown").classList.toggle("show");
-      }
-    </script>
+    <div class="sort-filter">
+      Filter By Tag:
+      <select name="filter" onchange="location = this.value;">
+        <?php $params['filter'] = '';
+        $new_uri = '/?' . http_build_query($params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_default ?>></option>
+
+        <?php $params['filter'] = 'Shrub';
+        $new_uri = '/?' . http_build_query($params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_shrub; ?>>Shrub</option>
+
+        <?php $params['filter'] = 'Grass';
+        $new_uri = '/?' . http_build_query($params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_grass; ?>>Grass</option>
+
+        <?php $params['filter'] = 'Vine';
+        $new_uri = '/?' . http_build_query($params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_vine; ?>>Vine</option>
+
+        <?php $params['filter'] = 'Tree';
+        $new_uri = '/?' . http_build_query($params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_tree; ?>>Tree</option>
+
+        <?php $params['filter'] = 'Flower';
+        $new_uri = '/?' . http_build_query($params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_flower; ?>>Flower</option>
+
+        <?php $params['filter'] = 'Groundcover';
+        $new_uri = '/?' . http_build_query($params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_groundcover; ?>>Groundcover</option>
+
+        <?php $params['filter'] = 'Other';
+        $new_uri = '/?' . http_build_query($params); ?>
+        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_other; ?>>Other</option>
+      </select>
+    </div>
   </div>
 
   <div class="catalog-gallery">
