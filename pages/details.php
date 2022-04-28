@@ -91,7 +91,9 @@ if (!file_exists($file_name)) {
     </div>
   </div>
 
-  <a href="/">Go back to catalog</a>
+  <div class="space">
+    <a href="/">Go back to catalog</a>
+  </div>
 
 </body>
 

@@ -522,8 +522,9 @@ if ($record) {
         </div>
       </form>
     </div>
-
-    <a href="/admin">Go back to catalog</a>
+    <div class="space">
+      <a href="/admin">Go back to catalog</a>
+    </div>
   <?php
   } else {
   ?>

@@ -150,3 +150,7 @@ div.catalog-gallery {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
+
+.space {
+  margin-top: 10px;
+}

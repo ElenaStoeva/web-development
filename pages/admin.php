@@ -482,16 +482,17 @@ if (is_user_logged_in()) {
             </div>
           </div>
 
+          <div class="space">
+            <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
 
-          <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
-
-          <p class="feedback <?php echo $file_feedback_class; ?>">Please select a JPG file.</p>
-          <div class="label-input">
-            <label for="upload-file">Upload JPG Image (optional):</label>
-            <input id="upload-file" type="file" name="jpg-file" accept=".jpg" />
+            <p class="feedback <?php echo $file_feedback_class; ?>">Please select a JPG file.</p>
+            <div class="label-input">
+              <label for="upload-file">Upload JPG Image (optional):</label>
+              <input id="upload-file" type="file" name="jpg-file" accept=".jpg" />
+            </div>
           </div>
 
-          <div>
+          <div class="space">
             <input type="submit" name="add_plant" value="Add">
           </div>
         </form>
@@ -566,7 +567,7 @@ if (is_user_logged_in()) {
                   </ul>
                 </li>
 
-                <form method="get" action="/edit">
+                <form class="space" method="get" action="/edit">
 
                   <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
 
