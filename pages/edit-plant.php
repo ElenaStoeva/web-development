@@ -397,9 +397,8 @@ if ($record) {
   <h1>Playful Plants Project</h1>
   <?php
   if (is_user_logged_in()) { ?>
-    <a href="<?php echo logout_url(); ?>">
-      <button>Log Out</button>
-    </a>
+
+    <button onclick="location.href='<?php echo logout_url(); ?>';">Log Out</button>
 
     <div class="tile">
       <img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant Image" width="400">
@@ -420,7 +419,7 @@ if ($record) {
         <div class="form-input">
           <div class="feedback <?php echo $plant_id_feedback_class; ?>">Please enter a plant ID.</div>
           <label for="plant-id">Plant ID:</label>
-          <input id="plant-id" type=" text" name="plant-id" value=" <?php echo htmlspecialchars($sticky_plant_id); ?>">
+          <input id="plant-id" type="text" name="plant-id" value=" <?php echo htmlspecialchars($sticky_plant_id); ?>">
         </div>
 
         <div role="group" class="form-input">

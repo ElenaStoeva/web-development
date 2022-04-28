@@ -312,9 +312,7 @@ if (is_user_logged_in()) {
   <h1>Playful Plants Project</h1>
   <?php
   if (is_user_logged_in()) { ?>
-    <a href="<?php echo logout_url(); ?>">
-      <button>Log Out</button>
-    </a>
+    <button onclick="location.href='<?php echo logout_url(); ?>';">Log Out</button>
 
     <div class="sort-filter">
       Sort:
