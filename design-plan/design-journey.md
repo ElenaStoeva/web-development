@@ -354,7 +354,7 @@ Final submission plan:
 9. Polish design of website. (DONE)
 10. Clean up and organize code. (DONE)
 11. Fix filled values in Edit form on the Edit page. (DONE)
-12. Test all pages.
+12. Test all pages. (DONE)
 ```
 
 ### Accessibility Audit (Final Submission)

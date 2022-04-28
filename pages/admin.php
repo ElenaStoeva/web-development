@@ -569,7 +569,7 @@ if (is_user_logged_in()) {
 
                 <form class="space" method="get" action="/edit">
 
-                  <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
+                  <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['plant_ID']); ?>" />
 
                   <button type="submit">
                     Edit
@@ -578,7 +578,7 @@ if (is_user_logged_in()) {
 
                 <form method="get" action="/admin">
 
-                  <input type="hidden" name="delete-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
+                  <input type="hidden" name="delete-plant" value="<?php echo htmlspecialchars($record['plant_ID']); ?>" />
 
                   <button type="submit">
                     Delete
@@ -605,6 +605,10 @@ if (is_user_logged_in()) {
     ?>
 
     <p>If you don't have an account and would like to volunteer for this project by being an administrator, please contact us at <a href="mailto:someone@yoursite.com">playfulplantsproject@gmail.com</a>.</p>
+
+    <div class="space">
+      <a href="/">Go back to catalog</a>
+    </div>
 
   <?php
   }
