@@ -278,6 +278,7 @@ if (is_user_logged_in()) {
   // --- Handle Filtering ---
 
   $sql_where_part = '';
+  $filter = $_GET['filter'] ?? NULL;
   if ($filter) {
     $sql_where_part = ' WHERE tags.tag_name = "' . $filter . '"';
   }
