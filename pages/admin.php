@@ -319,19 +319,19 @@ if (is_user_logged_in()) {
       <select name="sort" onchange="location = this.value;">
         <?php $new_params = $params;
         $new_params['order'] = 'asc';
-        $new_uri = '/?' . http_build_query($new_params); ?>
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_default ?>></option>
 
         <?php
         $new_params = $params;
         $new_params['order'] = 'asc';
-        $new_uri = '/?' . http_build_query($new_params); ?>
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_asc; ?>>Name Ascending</option>
 
         <?php
         $new_params = $params;
         $new_params['order'] = 'desc';
-        $new_uri = '/?' . http_build_query($new_params); ?>
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_desc; ?>>Name Descending</option>
       </select>
     </div>
@@ -340,35 +340,35 @@ if (is_user_logged_in()) {
       Filter By Tag:
       <select name="filter" onchange="location = this.value;">
         <?php $params['filter'] = '';
-        $new_uri = '/?' . http_build_query($params); ?>
+        $new_uri = '/admin?' . http_build_query($params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_default ?>></option>
 
         <?php $params['filter'] = 'Shrub';
-        $new_uri = '/?' . http_build_query($params); ?>
+        $new_uri = '/admin?' . http_build_query($params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_shrub; ?>>Shrub</option>
 
         <?php $params['filter'] = 'Grass';
-        $new_uri = '/?' . http_build_query($params); ?>
+        $new_uri = '/admin?' . http_build_query($params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_grass; ?>>Grass</option>
 
         <?php $params['filter'] = 'Vine';
-        $new_uri = '/?' . http_build_query($params); ?>
+        $new_uri = '/admin?' . http_build_query($params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_vine; ?>>Vine</option>
 
         <?php $params['filter'] = 'Tree';
-        $new_uri = '/?' . http_build_query($params); ?>
+        $new_uri = '/admin?' . http_build_query($params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_tree; ?>>Tree</option>
 
         <?php $params['filter'] = 'Flower';
-        $new_uri = '/?' . http_build_query($params); ?>
+        $new_uri = '/admin?' . http_build_query($params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_flower; ?>>Flower</option>
 
         <?php $params['filter'] = 'Groundcover';
-        $new_uri = '/?' . http_build_query($params); ?>
+        $new_uri = '/admin?' . http_build_query($params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_groundcover; ?>>Groundcover</option>
 
         <?php $params['filter'] = 'Other';
-        $new_uri = '/?' . http_build_query($params); ?>
+        $new_uri = '/admin?' . http_build_query($params); ?>
         <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_other; ?>>Other</option>
       </select>
     </div>
