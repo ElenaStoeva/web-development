@@ -81,10 +81,6 @@
   margin-bottom: 0px;
 }
 
-/* form {
-  margin-bottom: 50px;
-} */
-
 h1 {
   color: #008000;
 }
@@ -140,15 +136,6 @@ div.catalog-gallery {
 
 .show {
   display: block;
-}
-
-.arrow {
-  border: solid black;
-  border-width: 0 2px 2px 0;
-  display: inline-block;
-  padding: 2px;
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
 }
 
 .space {

@@ -8,7 +8,9 @@ $record = $records[0];
 // Get all tags of this plant
 $tags = array();
 foreach ($records as $record) {
-  array_push($tags, $record['tag_name']);
+  if ($record['tag_name'] != NULL) {
+    array_push($tags, $record['tag_name']);
+  }
 }
 
 $tag_names = "None";
@@ -16,10 +18,14 @@ if (count($tags) > 0) {
   $tag_names = implode(", ", $tags);
 }
 
-$file_name = "./public/photos/" . $plant_ID . ".jpg";
-if (!file_exists($file_name)) {
-  // Image Source: (original work) Elena Stoeva
-  $file_name = "/public/photos/image_placeholder.jpg";
+$file_name_uploads = "./public/uploads/plants/" . $record['plant_ID'] . ".jpg";
+$file_name_photos = "./public/photos/" . $record['plant_ID'] . ".jpg";
+// Image Source: (original work) Elena Stoeva
+$file_name = "/public/photos/image_placeholder.jpg";
+if (file_exists($file_name_uploads)) {
+  $file_name = $file_name_uploads;
+} else if (file_exists($file_name_photos)) {
+  $file_name = $file_name_photos;
 }
 ?>
 
@@ -87,7 +93,7 @@ if (!file_exists($file_name)) {
 
     </ul>
     <div>
-      Tags: <?php echo $tag_names ?>
+      Tags: <?php echo htmlspecialchars($tag_names) ?>
     </div>
   </div>
 

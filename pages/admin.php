@@ -125,11 +125,13 @@ if (is_user_logged_in()) {
       // This site only accepts JPG files
       if (!in_array($upload_ext, array("jpg"))) {
         $form_valid = False;
+        $file_feedback_class = '';
       }
     } else {
       // Something is uploaded but is wrong format/size
       if ($upload['name'] != "") {
         $form_valid = False;
+        $file_feedback_class = '';
       }
     }
 
@@ -152,7 +154,11 @@ if (is_user_logged_in()) {
         )
       );
 
+      $plant_inserted = True;
+
       $record_id = $db->lastInsertId('id');
+      // $inserted_record = $result->fetch_first();
+      // $record_id = $inserted_record['id'];
 
       if ($shrub_tag) {
         exec_sql_query(
@@ -232,7 +238,7 @@ if (is_user_logged_in()) {
       }
 
       if ($result && $upload['name'] != "") {
-        $id_filename = 'public/photos/' . $plant_id . '.' . $upload_ext;
+        $id_filename = 'public/uploads/plants/' . $plant_id . '.' . $upload_ext;
         move_uploaded_file($upload["tmp_name"], $id_filename);
       }
     } else {
@@ -293,9 +299,12 @@ if (is_user_logged_in()) {
   $sticky_filter_other = (($filter != "Other") ? '' : 'selected');
 
 
-  // --- Get Records From Database ---
-  $sql_query = 'SELECT * FROM plants LEFT OUTER JOIN plant_tags on plants.id = plant_tags.plant_id LEFT OUTER JOIN tags on tags.tag_id = plant_tags.tag_id' . $sql_where_part . $sql_order_part;
+  // --- Get Filtered and Sorted Records From Database ---
+  $sql_query = 'SELECT plants.id, plant_name_coll, plant_name_spec, plants.plant_ID, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play, tag_name FROM plants LEFT OUTER JOIN plant_tags on plants.id = plant_tags.plant_id LEFT OUTER JOIN tags on tags.tag_id = plant_tags.tag_id' . $sql_where_part . $sql_order_part;
   $records = exec_sql_query($db, $sql_query)->fetchAll();
+
+  // --- Get ALL Records From Database (used for obtaining tags) ---
+  $records_all = exec_sql_query($db, 'SELECT plants.id, plant_name_coll, plant_name_spec, plants.plant_ID, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play, tag_name FROM plants LEFT OUTER JOIN plant_tags on plants.id = plant_tags.plant_id LEFT OUTER JOIN tags on tags.tag_id = plant_tags.tag_id;')->fetchAll();
 }
 ?>
 <!DOCTYPE html>
@@ -318,59 +327,87 @@ if (is_user_logged_in()) {
     <div class="sort-filter">
       Sort:
       <select name="sort" onchange="location = this.value;">
-        <?php $new_params = $params;
-        $new_params['order'] = 'asc';
+        <?php
+        $new_params = array();
+        $new_params['filter'] = $params['filter'];
+        $new_params['order'] = '';
         $new_uri = '/admin?' . http_build_query($new_params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_default ?>></option>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_sort_default ?>>-</option>
 
         <?php
-        $new_params = $params;
+        $new_params = array();
+        $new_params['filter'] = $params['filter'];
         $new_params['order'] = 'asc';
         $new_uri = '/admin?' . http_build_query($new_params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_asc; ?>>Name Ascending</option>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_sort_asc; ?>>Name Ascending</option>
 
         <?php
-        $new_params = $params;
+        $new_params = array();
+        $new_params['filter'] = $params['filter'];
         $new_params['order'] = 'desc';
         $new_uri = '/admin?' . http_build_query($new_params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_desc; ?>>Name Descending</option>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_sort_desc; ?>>Name Descending</option>
       </select>
     </div>
 
     <div class="sort-filter">
       Filter By Tag:
       <select name="filter" onchange="location = this.value;">
-        <?php $params['filter'] = '';
-        $new_uri = '/admin?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_default ?>></option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = '';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_filter_default ?>>-</option>
 
-        <?php $params['filter'] = 'Shrub';
-        $new_uri = '/admin?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_shrub; ?>>Shrub</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Shrub';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_filter_shrub; ?>>Shrub</option>
 
-        <?php $params['filter'] = 'Grass';
-        $new_uri = '/admin?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_grass; ?>>Grass</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Grass';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_filter_grass; ?>>Grass</option>
 
-        <?php $params['filter'] = 'Vine';
-        $new_uri = '/admin?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_vine; ?>>Vine</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Vine';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_filter_vine; ?>>Vine</option>
 
-        <?php $params['filter'] = 'Tree';
-        $new_uri = '/admin?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_tree; ?>>Tree</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Tree';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_filter_tree; ?>>Tree</option>
 
-        <?php $params['filter'] = 'Flower';
-        $new_uri = '/admin?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_flower; ?>>Flower</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Flower';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_filter_flower; ?>>Flower</option>
 
-        <?php $params['filter'] = 'Groundcover';
-        $new_uri = '/admin?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_groundcover; ?>>Groundcover</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Groundcover';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_filter_groundcover; ?>>Groundcover</option>
 
-        <?php $params['filter'] = 'Other';
-        $new_uri = '/admin?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_other; ?>>Other</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Other';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/admin?' . http_build_query($new_params); ?>
+        <option value="<?php echo $new_uri; ?>" <?php echo $sticky_filter_other; ?>>Other</option>
       </select>
     </div>
 
@@ -395,7 +432,7 @@ if (is_user_logged_in()) {
           <div class="form-input">
             <div class="feedback <?php echo $plant_id_feedback_class; ?>">Please enter a plant ID.</div>
             <label for="plant-id">Plant ID:</label>
-            <input id="plant-id" type=" text" name="plant-id" value=" <?php echo htmlspecialchars($sticky_plant_id); ?>">
+            <input id="plant-id" type="text" name="plant-id" value=" <?php echo htmlspecialchars($sticky_plant_id); ?>">
           </div>
 
           <div role="group" class="form-input">
@@ -445,7 +482,7 @@ if (is_user_logged_in()) {
             </div>
           </div>
 
-          <div>Tags:</div>
+          <div>Tags (optional):</div>
           <div role="group">
             <div>
               <input type="checkbox" id="shrub_tag" name="shrub_tag" <?php echo $sticky_shrub_tag; ?> />
@@ -486,7 +523,7 @@ if (is_user_logged_in()) {
           <div class="space">
             <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
 
-            <p class="feedback <?php echo $file_feedback_class; ?>">Please select a JPG file.</p>
+            <p class="feedback <?php echo $file_feedback_class; ?>">Please select a valid JPG file.</p>
             <div class="label-input">
               <label for="upload-file">Upload JPG Image (optional):</label>
               <input id="upload-file" type="file" name="jpg-file" accept=".jpg" />
@@ -512,10 +549,30 @@ if (is_user_logged_in()) {
             foreach ($records as $record) {
               if (!in_array($record['plant_ID'], $displayed_plants)) {
                 array_push($displayed_plants, $record['plant_ID']);
-                $file_name = "./public/photos/" . $record['plant_ID'] . ".jpg";
-                if (!file_exists($file_name)) {
-                  // Image Source: (original work) Elena Stoeva
-                  $file_name = "/public/photos/image_placeholder.jpg";
+
+                // Get all tags of this plant
+                $tags = array();
+                foreach ($records_all as $current_record) {
+                  if ($current_record['plant_ID'] == $record['plant_ID'] && $current_record['tag_name'] != NULL) {
+                    array_push($tags, $current_record['tag_name']);
+                  }
+                }
+
+                $tag_names = "None";
+                if (count($tags) > 0) {
+                  $tag_names = implode(", ", $tags);
+                }
+
+
+                // Obtain image
+                $file_name_uploads = "./public/uploads/plants/" . $record['plant_ID'] . ".jpg";
+                $file_name_photos = "./public/photos/" . $record['plant_ID'] . ".jpg";
+                // Image Source: (original work) Elena Stoeva
+                $file_name = "/public/photos/image_placeholder.jpg";
+                if (file_exists($file_name_uploads)) {
+                  $file_name = $file_name_uploads;
+                } else if (file_exists($file_name_photos)) {
+                  $file_name = $file_name_photos;
                 } ?>
                 <li class="tile">
                   <img src=<?php echo htmlspecialchars($file_name); ?> alt="Plant" width="200">
@@ -567,26 +624,32 @@ if (is_user_logged_in()) {
                     <?php } ?>
                   </ul>
                 </li>
+                <li class="tile">
+                  Tags: <?php echo htmlspecialchars($tag_names); ?>
+                </li>
+                <li class="tile">
+                  <form class="space" method="get" action="/edit">
 
-                <form class="space" method="get" action="/edit">
+                    <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
 
-                  <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
+                    <button type="submit">
+                      Edit
+                    </button>
+                  </form>
+                </li>
 
-                  <button type="submit">
-                    Edit
-                  </button>
-                </form>
+                <li class="tile">
+                  <form method="get" action="/admin">
 
-                <form method="get" action="/admin">
+                    <input type="hidden" name="delete-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
 
-                  <input type="hidden" name="delete-plant" value="<?php echo htmlspecialchars($record['id']); ?>" />
+                    <button type="submit">
+                      Delete
+                    </button>
+                  </form>
+                  <hr>
+                </li>
 
-                  <button type="submit">
-                    Delete
-                  </button>
-                </form>
-
-                <hr>
             <?php }
             } ?>
           </ul>

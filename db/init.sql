@@ -150,7 +150,8 @@ CREATE TABLE plant_tags (
   plant_id TEXT NOT NULL,
 	tag_id TEXT NOT NULL,
   FOREIGN KEY (plant_id) REFERENCES plants(id),
-  FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
+  FOREIGN KEY (tag_id) REFERENCES tags(tag_id),
+  UNIQUE(plant_id,tag_id)
 );
 
 --- Initial tagging records ---

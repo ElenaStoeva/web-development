@@ -270,36 +270,33 @@ SELECT * FROM users WHERE username='provided_username' AND password='provided_pa
 ```
 
 ```
-Sort catalog by plant name:
-SELECT * FROM plants ORDER BY plant_name_coll ASC;
-```
-
-```
-Filter catalog by tag name:
-SELECT * FROM plants
-INNER JOIN plant_tags ON plants.id = plant_tags.plant_id
-INNER JOIN tags ON plant_tags.tag_id = tags.tag_id
-WHERE tags.tag_name = 'Tree';
+Get all catalog entries filtered by tag name (optional) and sorted by plant name (optional):
+SELECT plants.id, plant_name_coll, plant_name_spec, plants.plant_ID, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play FROM plants LEFT OUTER JOIN plant_tags on plants.id = plant_tags.plant_id
+FROM plants
+LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id
+LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id
+LEFT OUTER tags.tag_name = 'Tree'
+ORDER BY plant_name_coll ASC;
 ```
 
 ```
 Delete a plant:
 DELETE FROM plants
-WHERE plant_ID = 'TT_17';
+WHERE id = 1;
 ```
 
 ```
 Delete a tag from a deletef plant:
 DELETE FROM plant_tags
-WHERE plant_id = 'TT_17';
+WHERE plant_id = 1;
 ```
 
 ```
-Get all details of a plant with plant_ID FE_1 inclding its tags:
+Get all details of a plant with plant record id 1 inclding its tags:
 SELECT plant_name_coll, plant_name_spec, exploratory_constructive_play, ..., tags.tag_name FROM plants
 LEFT OUTER JOIN plant_tags ON plants.id = plant_tags.plant_id
 LEFT OUTER JOIN tags ON plant_tags.tag_id = tags.tag_id
-WHERE plants.plant_ID = 'FE_1';
+WHERE plants.id = 1;
 ```
 
 ### Code Planning (Milestone 1, Milestone 2, Milestone 3, Final Submission)

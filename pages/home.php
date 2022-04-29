@@ -43,7 +43,7 @@ $sticky_filter_other = (($filter != "Other") ? '' : 'selected');
 
 // --- Get Records From Database ---
 
-$sql_query = 'SELECT * FROM plants INNER JOIN plant_tags on plants.id = plant_tags.plant_id INNER JOIN tags on tags.tag_id = plant_tags.tag_id' . $sql_where_part . $sql_order_part;
+$sql_query = 'SELECT * FROM plants LEFT OUTER JOIN plant_tags on plants.id = plant_tags.plant_id LEFT OUTER JOIN tags on tags.tag_id = plant_tags.tag_id' . $sql_where_part . $sql_order_part;
 $records = exec_sql_query($db, $sql_query)->fetchAll();
 
 ?>
@@ -65,30 +65,32 @@ $records = exec_sql_query($db, $sql_query)->fetchAll();
 
   <div class="row">
     <div class="login">
-      <a href="/admin">
-        <button>Log In</button>
-      </a>
+      <button onclick="location.href='/admin';">Log In</button>
     </div>
 
     <div class="sort-filter">
       Sort:
       <select name="sort" onchange="location = this.value;">
-        <?php $new_params = $params;
-        $new_params['order'] = 'asc';
+        <?php
+        $new_params = array();
+        $new_params['filter'] = $params['filter'];
+        $new_params['order'] = '';
         $new_uri = '/?' . http_build_query($new_params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_default ?>></option>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_sort_default ?>>-</option>
 
         <?php
-        $new_params = $params;
+        $new_params = array();
+        $new_params['filter'] = $params['filter'];
         $new_params['order'] = 'asc';
         $new_uri = '/?' . http_build_query($new_params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_asc; ?>>Name Ascending</option>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_sort_asc; ?>>Name Ascending</option>
 
         <?php
-        $new_params = $params;
+        $new_params = array();
+        $new_params['filter'] = $params['filter'];
         $new_params['order'] = 'desc';
         $new_uri = '/?' . http_build_query($new_params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_sort_desc; ?>>Name Descending</option>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_sort_desc; ?>>Name Descending</option>
       </select>
     </div>
 
@@ -96,36 +98,57 @@ $records = exec_sql_query($db, $sql_query)->fetchAll();
       Filter By Tag:
       <select name="filter" onchange="location = this.value;">
         <?php $params['filter'] = '';
-        $new_uri = '/?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_default ?>></option>
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_filter_default ?>>-</option>
 
-        <?php $params['filter'] = 'Shrub';
-        $new_uri = '/?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_shrub; ?>>Shrub</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Shrub';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_filter_shrub; ?>>Shrub</option>
 
-        <?php $params['filter'] = 'Grass';
-        $new_uri = '/?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_grass; ?>>Grass</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Grass';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_filter_grass; ?>>Grass</option>
 
-        <?php $params['filter'] = 'Vine';
-        $new_uri = '/?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_vine; ?>>Vine</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Vine';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_filter_vine; ?>>Vine</option>
 
-        <?php $params['filter'] = 'Tree';
-        $new_uri = '/?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_tree; ?>>Tree</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Tree';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_filter_tree; ?>>Tree</option>
 
-        <?php $params['filter'] = 'Flower';
-        $new_uri = '/?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_flower; ?>>Flower</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Flower';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_filter_flower; ?>>Flower</option>
 
-        <?php $params['filter'] = 'Groundcover';
-        $new_uri = '/?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_groundcover; ?>>Groundcover</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Groundcover';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_filter_groundcover; ?>>Groundcover</option>
 
-        <?php $params['filter'] = 'Other';
-        $new_uri = '/?' . http_build_query($params); ?>
-        <option value=<?php echo $new_uri; ?> <?php echo $sticky_filter_other; ?>>Other</option>
+        <?php
+        $new_params = array();
+        $new_params['filter'] = 'Other';
+        $new_params['order'] = $params['order'];
+        $new_uri = '/?' . http_build_query($new_params); ?>
+        <option value="<?php echo htmlspecialchars($new_uri); ?>" <?php echo $sticky_filter_other; ?>>Other</option>
       </select>
     </div>
   </div>
@@ -137,10 +160,15 @@ $records = exec_sql_query($db, $sql_query)->fetchAll();
       if (!in_array($record['plant_ID'], $displayed_plants)) {
         array_push($displayed_plants, $record['plant_ID']);
         $plant_ID = $record['plant_ID'];
-        $file_name = "./public/photos/" . $plant_ID . ".jpg";
-        if (!file_exists($file_name)) {
-          // Image Source: (original work) Elena Stoeva
-          $file_name = "/public/photos/image_placeholder.jpg";
+
+        $file_name_uploads = "./public/uploads/plants/" . $record['plant_ID'] . ".jpg";
+        $file_name_photos = "./public/photos/" . $record['plant_ID'] . ".jpg";
+        // Image Source: (original work) Elena Stoeva
+        $file_name = "/public/photos/image_placeholder.jpg";
+        if (file_exists($file_name_uploads)) {
+          $file_name = $file_name_uploads;
+        } else if (file_exists($file_name_photos)) {
+          $file_name = $file_name_photos;
         }
     ?>
         <div class="gallery">
