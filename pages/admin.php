@@ -668,7 +668,7 @@ if (is_user_logged_in()) {
     echo_login_form('/admin', $session_messages);
     ?>
 
-    <p>If you don't have an account and would like to volunteer for this project by being an administrator, please contact us at <a href="mailto:someone@yoursite.com">playfulplantsproject@gmail.com</a>.</p>
+    <p>If you would like to explore the administrator's side of the website, please contact me at <a href="mailto:elena_stoeva@outlook.com">elena_stoeva@outlook.com</a> and I will provide you with credentials.</p>
 
     <div class="space">
       <a href="/">Go back to catalog</a>
